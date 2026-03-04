@@ -3328,7 +3328,7 @@ async function main() {
 					allow = await confirmAlt("This link wishes to inject third-party Javascript ⚠️\n\nIf you trust the link, click OK. Otherwise, click cancel.", true);
 				}
 			} catch(e){
-				allow = true;
+				allow = false;
 				warnlog(e);
 			}
 			
@@ -3372,7 +3372,7 @@ async function main() {
 				}
 			} catch(e){
 				warnlog(e);
-				allow = true;
+				allow = false;
 			}
 			
 			if (allow){
