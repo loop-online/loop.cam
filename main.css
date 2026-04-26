@@ -150,6 +150,10 @@ table {
 .buttonContainer button {
 	margin: 5px 2px;
 }
+.buttonContainer button.pressed {
+	background: #d64242;
+	color: #fff;
+}
 
 .promptModalLabel{
 	cursor: pointer;
@@ -6907,6 +6911,8 @@ button.toggleSettings,
 	content: "\f256"; }
 .la-phone-slash:before {
 	content: "\f3dd;"; }
+.la-map-marker-alt:before {
+	content: "\f3c5"; }
 .la-dot-circle:before {
 	content: "\f192"; }
 .la-bug:before {
@@ -8247,4 +8253,9 @@ body.cleanOutput .tipIconOverlay,
 .tipOnboardingBtn:hover {
     background: #5b6eae;
     text-decoration: none;
+}
+
+video.viewchroma-source-hidden {
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
