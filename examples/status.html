@@ -151,9 +151,14 @@
 				var log = document.body.getElementsByTagName("ul")[0];
 				var entry = document.createElement('li');
 				if (type){
-					type = "<i>"+type+"</i>";
+					var typeElement = document.createElement("i");
+					typeElement.textContent = type;
+					entry.appendChild(typeElement);
+					entry.appendChild(document.createTextNode(" "));
 				}
-				entry.innerHTML = type + data;
+				var message = document.createElement("span");
+				message.textContent = data;
+				entry.appendChild(message);
 				
 				//setTimeout(function(entry){ // hide message after 60 seconds
 			//		entry.innerHTML="";

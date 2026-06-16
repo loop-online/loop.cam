@@ -2,3 +2,11 @@ node_modules/
 package-lock.json
 turn-credentials.php
 .vscode/
+.claude
+.claude/
+AGENTS.md
+CLAUDE.md
+cf/
+wrangler.toml
+package.json
+docs.md

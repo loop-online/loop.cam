@@ -278,7 +278,36 @@
 		position: absolute;
 		bottom: 0;
 	}
+#lastUrls {
+    /* Keep your original styles for the select element */
+    font-size: calc(16px + 0.3vw);
+    width: 730px;
+    height: 100%;
+    flex: 20;
+    border-radius: 10px;
+    padding: 1em;
+    background: #101520;
+    color: white;
+    cursor: pointer;
+}
 
+/* These styles target the dropdown list in Webkit browsers */
+#lastUrls::-webkit-listbox {
+    max-height: 200px !important;
+}
+
+/* For Firefox */
+#lastUrls {
+    scrollbar-width: thin;
+    scrollbar-color: #384861 #182031;
+}
+
+/* This will help force the height of the dropdown menu in many browsers */
+@supports (-moz-appearance:none) {
+    #lastUrls {
+        overflow: -moz-scrollbars-vertical;
+    }
+}
 	</style>
 </head>
 <body>
@@ -321,26 +350,94 @@
 *  tree. Alternative licencing options can be made available on request.
 *
 */
-var lastUrls = JSON.parse(localStorage.getItem('lastUrls'));
-if (lastUrls != undefined) {
-	document.querySelector("#changeText").value = lastUrls[0];
-	if (lastUrls.length>0){
-		lastUrls.forEach((url)=>{
-			var o = document.createElement('option');
-			o.value = url;
-			o.text = url;
-			document.querySelector("#lastUrls").appendChild(o);
-		})
-	} else {
-		document.querySelector("#history").style.display="none";
-	}
-} else {
-	document.querySelector("#history").style.display="none";
-}
+
 
 function setUrl(){
 	document.querySelector("#changeText").value = document.querySelector("#lastUrls").value;
 	gohere();
+}
+
+function createCustomScrollableDropdown() {
+    const originalSelect = document.querySelector('#lastUrls');
+    if (!originalSelect) return;
+    
+    // Create custom dropdown container
+    const dropdownContainer = document.createElement('div');
+    dropdownContainer.id = 'custom-lastUrls-container';
+    dropdownContainer.style.position = 'relative';
+    dropdownContainer.style.width = '730px';
+    dropdownContainer.style.flex = '20';
+    
+    // Create the dropdown header (what shows when closed)
+    const dropdownHeader = document.createElement('div');
+    dropdownHeader.id = 'custom-lastUrls-header';
+    dropdownHeader.style.fontSize = 'calc(16px + 0.3vw)';
+    dropdownHeader.style.padding = '1em';
+    dropdownHeader.style.borderRadius = '10px';
+    dropdownHeader.style.background = '#FFF';
+    dropdownHeader.style.color = '#000';
+    dropdownHeader.style.cursor = 'pointer';
+    dropdownHeader.textContent = originalSelect.options.length > 0 ? 
+                                originalSelect.options[0].text : 'History';
+    
+    // Create the dropdown list (what shows when opened)
+    const dropdownList = document.createElement('div');
+    dropdownList.id = 'custom-lastUrls-list';
+    dropdownList.style.display = 'none';
+    dropdownList.style.position = 'absolute';
+    dropdownList.style.width = '100%';
+    dropdownList.style.maxHeight = '200px';
+    dropdownList.style.overflowY = 'auto';
+    dropdownList.style.background = '#DDD';
+    dropdownList.style.borderRadius = '10px';
+    dropdownList.style.zIndex = '100';
+    
+    // Add options to the dropdown list
+    Array.from(originalSelect.options).forEach((option, index) => {
+        const item = document.createElement('div');
+        item.className = 'custom-lastUrls-item';
+        item.style.padding = '0.5em 1em';
+        item.style.cursor = 'pointer';
+        item.textContent = option.text;
+        item.dataset.value = option.value;
+        
+        if (index % 2 === 1) {
+            item.style.backgroundColor = '#FFF';
+        }
+        
+        item.addEventListener('click', function() {
+            dropdownHeader.textContent = this.textContent;
+            dropdownList.style.display = 'none';
+            
+            // Update the original select value and trigger its change event
+            originalSelect.value = this.dataset.value;
+            const event = new Event('change');
+            originalSelect.dispatchEvent(event);
+        });
+        
+        dropdownList.appendChild(item);
+    });
+    
+    // Toggle dropdown on header click
+    dropdownHeader.addEventListener('click', function() {
+        const isDisplayed = dropdownList.style.display === 'block';
+        dropdownList.style.display = isDisplayed ? 'none' : 'block';
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdownContainer.contains(e.target)) {
+            dropdownList.style.display = 'none';
+        }
+    });
+    
+    // Add everything to the container
+    dropdownContainer.appendChild(dropdownHeader);
+    dropdownContainer.appendChild(dropdownList);
+    
+    // Replace the original select with our custom dropdown
+    originalSelect.style.display = 'none';
+    originalSelect.parentNode.insertBefore(dropdownContainer, originalSelect);
 }
 
 function resetHistory(){
@@ -446,13 +543,22 @@ function getPermssions(e=null){
 		});
 		listed=true;
 		audioOutputSelect.focus();
-		
-	}).catch(function(){
-		document.getElementById("messageDiv").innerHTML = "Failed to list available output devices\n\nPlease ensure you allowed the microphone permissions.";
+
+	}).catch(function(err){
+		var errorMessage = "Failed to list available audio devices\n\n";
+		if (err && err.name === "NotFoundError") {
+			errorMessage += "No microphone detected. Please connect a microphone and refresh.";
+		} else if (err && err.name === "NotAllowedError") {
+			errorMessage += "Microphone permission denied. Please allow microphone access.";
+		} else if (err && err.name === "NotReadableError") {
+			errorMessage += "Microphone is in use by another application.";
+		} else {
+			errorMessage += "Please ensure you have a microphone connected and allowed permissions.";
+		}
+		document.getElementById("messageDiv").innerHTML = errorMessage;
 		document.getElementById("messageDiv").style.display="block";
 		setTimeout(function(){document.getElementById("messageDiv").style.opacity="1.0";},0);
-		
-		});
+	});
 }
 
 function gotDevices(deviceInfos) {
@@ -526,7 +632,6 @@ function createSpecialDeviceLink(deviceLabel) {
   link.style.transition = 'opacity 2s ease-in-out';
   link.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
   link.style.fontFamily = 'Arial, sans-serif';
-  link.style.zIndex = '1000';
   link.title = "Make this video device fully fill the window, making it perfect for screen capture.";
 
   document.body.appendChild(link);
@@ -541,6 +646,77 @@ function createSpecialDeviceLink(deviceLabel) {
   };
 }
 
+function checkForAsioDevices() {
+  if (navigator.userAgent.toLowerCase().indexOf(' electron/') > -1) {
+    try {
+      // Try async first (works in sandbox mode)
+      if (window.electronApi && window.electronApi.isAsioAvailableAsync) {
+        window.electronApi.isAsioAvailableAsync().then(function(available) {
+          if (!available) return;
+          window.electronApi.getAsioDevicesAsync().then(function(asioDevices) {
+            if (asioDevices && asioDevices.length > 0) {
+              createAsioNotice(asioDevices);
+            }
+          }).catch(function(e) { console.warn("ASIO devices check failed:", e); });
+        }).catch(function(e) { console.warn("ASIO availability check failed:", e); });
+      }
+      // Fallback to sync (works when --node flag used)
+      else if (window.electronApi && window.electronApi.isAsioAvailable && window.electronApi.isAsioAvailable()) {
+        var asioDevices = window.electronApi.getAsioDevices();
+        if (asioDevices && asioDevices.length > 0) {
+          createAsioNotice(asioDevices);
+        }
+      }
+    } catch (e) {
+      console.warn("ASIO detection check failed:", e);
+    }
+  }
+}
+
+function createAsioNotice(asioDevices) {
+  var noticeText = asioDevices.length === 1
+    ? "ASIO: " + asioDevices[0].name
+    : "ASIO: " + asioDevices.length + " devices";
+
+  var notice = document.createElement('div');
+  notice.id = 'asioNotice';
+  notice.style.position = 'fixed';
+  notice.style.bottom = '45px';
+  notice.style.left = '50%';
+  notice.style.transform = 'translateX(-50%)';
+  notice.style.backgroundColor = 'rgba(0, 40, 0, 0.8)';
+  notice.style.color = '#6f6';
+  notice.style.padding = '8px 12px';
+  notice.style.borderRadius = '20px';
+  notice.style.fontSize = '14px';
+  notice.style.textDecoration = 'none';
+  notice.style.opacity = '0';
+  notice.style.transition = 'opacity 2s ease-in-out';
+  notice.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+  notice.style.fontFamily = 'Arial, sans-serif';
+  notice.title = "Professional low-latency audio input available via ASIO";
+
+  var textSpan = document.createElement('span');
+  textSpan.textContent = noticeText;
+
+  var linkSpan = document.createElement('span');
+  linkSpan.textContent = ' - ';
+
+  var link = document.createElement('a');
+  link.href = 'https://github.com/steveseguin/electroncapture#asio-audio-capture-windows-only';
+  link.target = '_blank';
+  link.textContent = 'Low-latency pro audio available';
+  link.style.color = '#0ff';
+
+  notice.appendChild(textSpan);
+  notice.appendChild(linkSpan);
+  notice.appendChild(link);
+
+  document.body.appendChild(notice);
+  setTimeout(() => notice.style.opacity = '1', 100);
+
+  console.log("ASIO devices available:", asioDevices.map(function(d) { return d.name; }));
+}
 function normalizeDeviceLabel(deviceName) {
   return String(deviceName).replace(/[\W]+/g, "_").toLowerCase();
 }
@@ -558,9 +734,19 @@ function getPermssions(e=null){
     });
     listed=true;
     audioOutputSelect.focus();
-    
-  }).catch(function(){
-    document.getElementById("messageDiv").innerHTML = "Failed to list available audio devices\n\nPlease ensure you allowed the microphone permissions.";
+
+  }).catch(function(err){
+    var errorMessage = "Failed to list available audio devices\n\n";
+    if (err && err.name === "NotFoundError") {
+      errorMessage += "No microphone detected. Please connect a microphone and refresh.";
+    } else if (err && err.name === "NotAllowedError") {
+      errorMessage += "Microphone permission denied. Please allow microphone access.";
+    } else if (err && err.name === "NotReadableError") {
+      errorMessage += "Microphone is in use by another application.";
+    } else {
+      errorMessage += "Please ensure you have a microphone connected and allowed permissions.";
+    }
+    document.getElementById("messageDiv").innerHTML = errorMessage;
     document.getElementById("messageDiv").style.display="block";
     setTimeout(function(){document.getElementById("messageDiv").style.opacity="1.0";},0);
   });
@@ -591,6 +777,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 	document.addEventListener('DOMContentLoaded', () => {
 	  getPermssions();
 	  checkForSpecialVideoDevices();
+	  checkForAsioDevices();
 	  setTimeout(lazyPreloadCSS, 2000);
 	});
 }
@@ -656,7 +843,7 @@ function addUrlToHistory(url){
 	}
 	if ( lastUrls[0] != url ) {
 		lastUrls.unshift(url);
-		if (lastUrls.length == 6) {
+		if (lastUrls.length == 100) {
 			lastUrls.pop();
 		}
 	}
@@ -696,6 +883,25 @@ function gohere(){
 	}
 	window.location = url;
 };
+
+var lastUrls = JSON.parse(localStorage.getItem('lastUrls'));
+if (lastUrls != undefined) {
+    document.querySelector("#changeText").value = lastUrls[0];
+    if (lastUrls.length > 0) {
+        lastUrls.forEach((url) => {
+            var o = document.createElement('option');
+            o.value = url;
+            o.text = url;
+            document.querySelector("#lastUrls").appendChild(o);
+        });
+        // Create custom dropdown after populating
+        createCustomScrollableDropdown();
+    } else {
+        document.querySelector("#history").style.display = "none";
+    }
+} else {
+    document.querySelector("#history").style.display = "none";
+}
 getPermssions();
 </script>
 </body>

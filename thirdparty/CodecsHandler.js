@@ -23,7 +23,7 @@ Copyright (c) 2012-2020 [Muaz Khan](https://github.com/muaz-khan)
 	
 // Sourced from: https://cdn.webrtc-experiment.com/CodecsHandler.js
 
-// *FILE HAS BEEN HEAVILY MODIFIED BY Loop Online. ALL RIGHTS RESERVED WHERE APPLICABLE *
+// *FILE HAS BEEN HEAVILY MODIFIED BY STEVE SEGUIN. ALL RIGHTS RESERVED WHERE APPLICABLE *
 
 var CodecsHandler = (function() {
     function preferCodec(sdp, codec, useRed=false, useUlpfec=false) {
@@ -138,7 +138,15 @@ var CodecsHandler = (function() {
 		}
 
 		// Set codec order: preferred codec + error correction + others
-		var newOrder = [].concat(errorCorrectionNumbers).concat(preferCodecNumber).filter(Boolean);
+		var newOrder = [];
+		if (preferCodecNumber) {
+			newOrder.push(preferCodecNumber);
+		}
+		errorCorrectionNumbers.forEach(function(codecNumber) {
+			if (!newOrder.includes(codecNumber)) {
+				newOrder.push(codecNumber);
+			}
+		});
 		info.audioCodecNumbers.forEach(function(codecNumber) {
 			if (!newOrder.includes(codecNumber)) {
 				newOrder.push(codecNumber);
@@ -511,24 +519,14 @@ var CodecsHandler = (function() {
 		if (opusIndex) {
 			opusPayload = getCodecPayloadType(sdpLines[opusIndex]);
 		}
-		
-		var redIndex = findLine(sdpLines, 'a=rtpmap', 'red/48000');
-		var redPayload;
-		if (redIndex) {
-			redPayload = getCodecPayloadType(sdpLines[redIndex]);
-		}
 
-		if (!opusPayload && !redPayload) {
+		if (!opusPayload) {
 			return sdp;
 		}
-		
+
 		if (opusPayload){
 			if (debug) console.log("Processing OPUS codec");
 			sdpLines = processOpus(sdpLines, opusPayload, opusIndex, "OPUS", params, debug);
-		}
-		if (redPayload){
-			if (debug) console.log("Processing RED codec");
-			sdpLines = processOpus(sdpLines, redPayload, redIndex, "RED", params, debug);
 		}
 		
 		return sdpLines.join('\r\n');
@@ -720,4 +718,3 @@ var CodecsHandler = (function() {
 		preferAudioCodec: preferAudioCodec
     };
 })();
-
