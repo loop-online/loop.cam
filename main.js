@@ -548,7 +548,7 @@ async function main() {
 				getById("chatBody").innerHTML = "";
 			} catch (e) {}
 		} else if (session.label === false) {
-			document.title = location.hostname;
+			document.title = getById("metaTitle").content || "Loop Cam";
 		}
 		try {
 			if (ln_template === false) {
@@ -8420,6 +8420,7 @@ async function main() {
 				} else if (e.data.function === "eval") {
 					eval(e.data.value); // eval == evil ; feedback welcomed ;
 				}
+				return;
 			}
 		} catch (err) {
 			errorlog(err);

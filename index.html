@@ -13,6 +13,11 @@
 			} catch(e){
 				console.error(e);
 			}
+			if (window.obsstudio){
+				const style = document.createElement('style');
+				style.textContent = '*{-webkit-app-region:unset !important}';
+				document.documentElement.appendChild(style);
+			}
 		
 		</script>
 		<script>
@@ -29,21 +34,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
 		<meta content="utf-8" http-equiv="encoding" />
-		<meta name="copyright" content="&copy; 2024 Steve Seguin" />
-		<meta name="license" content="https://github.com/steveseguin/vdo.ninja/LICENSE.md" />
-		<meta name="sourcecode" content="https://github.com/steveseguin/vdo.ninja" />
-		<meta name="stance-on-war" content="Steve Seguin condemns Russia's brutal invasion of Ukraine 💙💛." />
 		<meta name="robots" content="index, follow">
-		<link rel="canonical" href="https://vdo.ninja/">
-		<link rel="author" href="/about" />
-		<link rel="me" href="https://vdo.ninja/about" />
+		<link rel="canonical" href="https://loop.cam/">
 		<link rel="manifest" href="manifest.json">
 		
 		<!-- Primary Meta Tags -->
-		<title>VDO.Ninja</title>
-		<meta id="metaTitle" name="title" content="VDO.Ninja" />
-		<meta name="description" content="Bring live video from your smartphone, computer, or friends directly into your Studio. 100% free." />
-		<meta name="author" content="Steve Seguin" />
+		<title>Loop Cam</title>
+		<meta id="metaTitle" name="title" content="Loop Cam" />
+		<meta name="description" content="Bring live video from any device directly into your Studio." />
+		<meta name="author" content="Loop" />
 		
 		
 		<meta name="msapplication-TileColor" content="#da532c" />
@@ -55,27 +54,39 @@
 		<link id="favicon1" rel="icon" type="image/png" sizes="32x32" href="./media/favicon-32x32.png" />
 		<link id="favicon2" rel="icon" type="image/png" sizes="16x16" href="./media/favicon-16x16.png" />
 		<link id="favicon3" rel="icon" href="./media/favicon.ico" />
-		<link id="thumbnailUrl" itemprop="thumbnailUrl" href="./media/vdoNinja_logo_full.png" />
+		<link id="thumbnailUrl" itemprop="thumbnailUrl" href="./media/loop_full_thumb.png" />
 		<link rel="alternate" type="text/markdown" href="/rawdoc.md" title="Developer and User Documentation">
 
 		<!-- X (Twitter) Card Tags -->
-		<meta name="twitter:card" content="summary_large_image">
-		<meta name="twitter:creator" content="@SteveSeguin">
-		<meta name="twitter:title" content="VDO.Ninja">
-		<meta name="twitter:description" content="Bring live video from your smartphone, computer, or friends directly into OBS Studio or other. 100% free.">
-		<meta name="twitter:image" content="https://vdo.ninja/media/vdoNinja_logo_full.png">
+		<meta property="twitter:card" content="summary_large_image">
+		<meta property="twitter:title" content="Loop Cam">
+		<meta name="twitter:description" content="Zero latency live video. Any Device. Anywhere.">
+		<meta property="twitter:url" content="https://loop.cam/">
+		<meta property="twitter:image" content="https://loop.cam/media/loop_full_thumb.png">
 		
 		<!-- Open Graph Tags (also used by X) -->
 		<meta property="og:type" content="website">
-		<meta property="og:url" content="https://vdo.ninja/">
-		<meta property="og:title" content="VDO.Ninja">
-		<meta property="og:description" content="Bring live video from your smartphone, computer, or friends directly into OBS Studio or other. 100% free.">
-		<meta property="og:image" content="https://vdo.ninja/media/vdoNinja_logo_full.png">
+		<meta property="og:url" content="https://loop.cam/">
+		<meta property="og:title" content="Loop Cam">
+		<meta property="og:description" content="Zero latency live video. Any Device. Anywhere.">
+		<meta property="og:image" itemprop="image" content="https://loop.cam/media/loop_full_thumb.png">
+		<meta property="og:image:type" content="image/png">
 		<meta property="og:image:width" content="1200">
 		<meta property="og:image:height" content="630">
-		<meta property="og:site_name" content="VDO.Ninja">
+		<meta property="og:site_name" content="Loop Cam">
 
 		<style id="lightbox-animations" type="text/css"></style>
+		<style id="loop-header-branding" type="text/css">
+			#logo {
+				height: 36px;
+				margin-right: 8px;
+			}
+			#head1 {
+				align-items: center;
+				display: flex;
+				padding: 16px;
+			}
+		</style>
 		
 		<!-- Authentication styles -->
 		<link rel="stylesheet" href="auth-styles.css">
@@ -83,11 +94,11 @@
 	</head>
 	<body id="main" class="main hidden" onload="main()">
 		<span itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
-			<link itemprop="url" href="./media/vdoNinja_logo_full.png" />
+			<link itemprop="url" href="./media/loop_full_thumb.png" />
 		</span>
-		<link itemprop="thumbnailUrl" href="./media/vdoNinja_logo_full.png" />
+		<link itemprop="thumbnailUrl" href="./media/loop_full_thumb.png" />
 		<span itemprop="thumbnail" itemscope itemtype="http://schema.org/ImageObject">
-			<link itemprop="url" href="./media/vdoNinja_logo_full.png" />
+			<link itemprop="url" href="./media/loop_full_thumb.png" />
 		</span>
 		<script type="text/javascript" crossorigin="anonymous"  src="./thirdparty/CodecsHandler.js?ver=29"></script>
 		<script type="text/javascript" crossorigin="anonymous" src="./thirdparty/aes.js"></script>
@@ -98,12 +109,11 @@
 			
 			<a id="logoname" href="./" style="text-decoration: none; color: white; margin: 0 2px 0px 8px;">
 				<span data-translate="logo-header">
-					<span id="qos">V</span>DO.Ninja 
+					<span id="qos">L</span>oop Cam
 				</span>
 			</a>
 			<div id="head1">
-				<input type="text" autocorrect="off" autocapitalize="none" id="joinroomID" name="joinroomID" tabindex="1" size="22" placeholder="Join by Room Name here" alt="Enter a room name to join" title="Enter a room name to quick join" onkeyup="jumptoroom(event)"/>
-				<button onclick="jumptoroom();" id='jumptoroomButton' role="button" aria-pressed="false" tabindex="1" alt="Join room" title="Join room" >GO</button>
+				<img src="./media/loop_logo.png" id="logo" alt="Loop Cam" />
 			</div>
 			<div id="head1a" class="hidden">
 				<input type="text" autocorrect="off" autocapitalize="none" id="joinbyURL" name="joinbyURL" size="22" placeholder="Load a website URL" alt="Enter the URL to load" title="Enter the URL to load"/>
@@ -359,7 +369,7 @@
 			<span
 					id="helpbutton"
 					title="Show help contact info" 
-					onclick="warnUser('For support, please browse https://reddit.com/r/vdoninja or join the live chat on Discord at https://discord.vdo.ninja.\n\nThe Docs also contains many help guides and advanced settings, located at https://docs.vdo.ninja.\n\nTo access the video stats menu, hold CTRL (command) and Left-Click on a video. Most video issues can be fixed by using Wired Internet instead of Wi-Fi.')"
+					onclick="warnUser('For Loop Cam support, contact your Loop production support channel.\n\nThe VDO.Ninja docs contain technical guides and advanced settings, located at https://docs.vdo.ninja.\n\nTo access the video stats menu, hold CTRL (command) and Left-Click on a video. Most video issues can be fixed by using wired internet instead of Wi-Fi.')"
 					style="cursor: pointer; display:none;"
 					alt="How to Use This with OBS"
 					role="button" 
@@ -375,7 +385,7 @@
 			</span>
 		</span>
 		<div id="mainmenu" class="row" style="opacity: 0;">
-			<div id="container-1" title="Add Group Chat to OBS"  alt="Add Group Chat to OBS" tabindex="1" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);" class="column columnfade pointer card" style=" overflow-y: auto;">
+			<div id="container-1" title="Create a Room"  alt="Create a Room" tabindex="1" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);" class="column columnfade pointer card" style=" overflow-y: auto;">
 				
 					<h2>
 						<span data-translate="add-group-chat">Create a Room</span>
@@ -514,7 +524,6 @@
 									<li>Disabling video sharing between guests will improve performance</li>
 									<li>Invite only guests to the room that you trust.</li>
 									<li>The "Recording" option is considered experimental.</li>
-									<li><a href="https://params.vdo.ninja"><u>Advanced URL parameters</u></a> are available to customize rooms.</li>
 								</span>
 							</ul>
 						</span>
@@ -540,9 +549,9 @@
 						</div>
 					</div>
 			</div>
-			<div id="container-3"  title="Add your Camera to OBS" onkeyup="enterPressedClick(event,this);"  alt="Add your Camera to OBS" tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card" onclick="previewWebcam()" style=" overflow-y: auto;">
+			<div id="container-3"  title="Share Camera" onkeyup="enterPressedClick(event,this);"  alt="Share Camera" tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card" onclick="previewWebcam()" style=" overflow-y: auto;">
 				<h2 id="add_camera">
-					<span data-translate="add-your-camera">Add your Camera to OBS</span>
+					<span data-translate="add-your-camera">Share Camera</span>
 				</h2>
 				<div class="container-inner" id="add_camera_inner">
 					<br />
@@ -765,9 +774,9 @@
 					</div>
 				</div>
 			</div>
-			<div id="container-3a"  title="Add your Microphone to OBS" onkeyup="enterPressedClick(event,this);"  alt="Add your Microphone to OBS" tabindex="1" role="button" aria-pressed="false" class="microphoneBackground column columnfade pointer card hidden" onclick="previewWebcam(true)" style=" overflow-y: auto;">
+			<div id="container-3a"  title="Share Microphone" onkeyup="enterPressedClick(event,this);"  alt="Share Microphone" tabindex="1" role="button" aria-pressed="false" class="microphoneBackground column columnfade pointer card hidden" onclick="previewWebcam(true)" style=" overflow-y: auto;">
 				<h2 id="add_microphone">
-					<span data-translate="add-your-microphone">Add your Microphone to OBS</span>
+					<span data-translate="add-your-microphone">Share Microphone</span>
 				</h2>
 				<div class="outer close" role="button" aria-pressed="false"  title="Go back">
 					<div class="inner">
@@ -777,9 +786,9 @@
 					</div>
 				</div>
 			</div>
-			<div id="container-2" title="Remote Screenshare into OBS" onkeyup="enterPressedClick(event,this);"  alt="Remote Screenshare into OBS"  tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card screenshareIcon" style=" overflow-y: auto;">
+			<div id="container-2" title="Share Screen" onkeyup="enterPressedClick(event,this);"  alt="Share Screen"  tabindex="1" role="button" aria-pressed="false" class="column columnfade pointer card screenshareIcon" style=" overflow-y: auto;">
 				<h2 id="add_screen">
-					<span data-translate="remote-screenshare-obs">Remote Screenshare into OBS</span>
+					<span data-translate="remote-screenshare-obs">Share Screen</span>
 				</h2>
 				<div class="container-inner">
 					<div class="screenshare-icon">
@@ -876,7 +885,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="container-4" tabindex="1" alt="Create Reusable Invite" onkeyup="enterPressedClick(event,this);" onclick="loadQR();" title="Create Reusable Invite" role="button" aria-pressed="false" class="column columnfade pointer card" style=" overflow-y: auto;">
+			<div id="container-4" tabindex="1" alt="Create Reusable Invite" onkeyup="enterPressedClick(event,this);" onclick="loadQR();" title="Create Reusable Invite" role="button" aria-pressed="false" class="column columnfade pointer card hidden" style=" overflow-y: auto;">
 				<h2>
 					<span data-translate="create-reusable-invite">Create Reusable Invite</span>
 				</h2>
@@ -1205,38 +1214,15 @@
 				<center>
 					<div class="infoblob">
 						<span data-translate="info-blob">
-							<h2>What is VDO.Ninja</h2>
+							<h2>What is Loop Cam?</h2>
 							<br />
-							<li>100% <b>free</b>; no downloads; no personal data collection; no sign-in</li>
-							<li>Bring live video from your smartphone, remote computer, or friends directly into OBS or other studio software.</li>
-							<li>We use cutting edge Peer-to-Peer forwarding technology that offers privacy and ultra-low latency</li>
-							<br />
-							<li>Youtube video 
-								<i class="lab la-youtube"></i>
-								<a title="Open a YouTube video demoing the basics of VDO.Ninja" href="https://www.youtube.com/watch?v=QaA_6aOP9z8&list=PLWodc2tCfAH1l_LDvEyxEqFf42hOBKqQM&index=1" alt="Youtube video demoing VDO.Ninja">Demoing it here</a>
-							</li>
-							
-							<br />
-							<i>
-								<a href="https://docs.vdo.ninja/common-errors-and-known-issues/known-issues" title="For a list of common or known issues, click here" target="_blank"><span style="color: red;">Known issues:</span></a>
-							</i>
-							<br />
-							<li>
-								If the video fails to load in OBS Studio, where the browser source remains blank, try disabling hardware-acceleration or 
-								<a href="https://docs.vdo.ninja/common-errors-and-known-issues/obs.ninja-doesnt-show-up-in-obs-or-is-choppy" title="Click to link out to the VDO.Ninja help guide for common OBS Studio problems" target="_blank">refer to this help guide</a> for more.
-							</li>
-							<br />
-							<h4>
-								<span style="color:#daad09;">Welcome to VDO Ninja! We've rebranded!  Nothing else is changing and we're staying 100% free.</span>
-							</h4>
-							<br />
-							<span title="Made in Canada">🌱</span> Site last updated on May 10th. Development <a target="_blank" title="Open a page with recent VDO.Ninja development and feature updates" href="https://updates.vdo.ninja/">updates are here.</a> 
-							<br />
+							<li>Loop Cam is Loop's branded production source tool for bringing live cameras, microphones, and screen shares into OBS or other studio software.</li>
+							<li>It is built on VDO.Ninja's peer-to-peer WebRTC runtime, keeping the low-latency behavior and advanced compatibility of the upstream project.</li>
+							<li>No app install is required for the standard browser workflow.</li>
 							<br />
 							<h3>
-							   🛠 For support, join the <a href="https://discord.vdo.ninja" target="_blank">Discord <i class="lab la-discord"></i></a> or see the <a href="https://www.reddit.com/r/VDONinja/" target="_blank">sub-reddit <i class="lab la-reddit-alien"></i></a>. The <a href="https://docs.vdo.ninja/" target="_blank">documentation is here</a> and my personal email is <i>steve@seguin.email</i>
+							   For Loop Cam support, contact your Loop production support channel. The <a href="https://docs.vdo.ninja/" target="_blank">VDO.Ninja technical documentation</a> is available for advanced settings.
 							</h3> 
-							<a href="https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions" target="_blank">
 						</span>
 					</div>
 				</center>

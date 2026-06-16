@@ -1,7 +1,7 @@
 {
-  "name": "VDO.Ninja",
-  "short_name": "VDO.Ninja",
-  "description": "Bring live video from your smartphone, computer, or friends directly into your Studio. 100% free.",
+  "name": "Loop Cam",
+  "short_name": "Loop Cam",
+  "description": "Bring live video from any device directly into your Studio.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

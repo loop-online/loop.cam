@@ -1,0 +1,162 @@
+#!/usr/bin/env node
+
+const fs = require("node:fs");
+const http = require("node:http");
+const path = require("node:path");
+
+const root = path.resolve(__dirname, "..");
+
+const mimeTypes = {
+	".css": "text/css",
+	".gif": "image/gif",
+	".html": "text/html",
+	".ico": "image/x-icon",
+	".js": "text/javascript",
+	".json": "application/json",
+	".mp3": "audio/mpeg",
+	".ogg": "audio/ogg",
+	".png": "image/png",
+	".svg": "image/svg+xml",
+	".wasm": "application/wasm",
+	".wav": "audio/wav",
+	".webm": "video/webm",
+	".woff": "font/woff",
+	".woff2": "font/woff2"
+};
+
+function assertEqual(name, actual, expected) {
+	if (actual !== expected) {
+		throw new Error(`${name} mismatch\nexpected: ${expected}\nactual:   ${actual}`);
+	}
+}
+
+function resolveChromePath() {
+	return [
+		process.env.CHROME_PATH,
+		"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+		"/Applications/Chromium.app/Contents/MacOS/Chromium"
+	].filter(Boolean).find(candidate => fs.existsSync(candidate));
+}
+
+function createServer() {
+	const server = http.createServer((request, response) => {
+		const url = new URL(request.url, "http://localhost");
+		const pathname = decodeURIComponent(url.pathname);
+		const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
+		const filePath = path.resolve(root, relativePath);
+
+		if (!filePath.startsWith(root)) {
+			response.writeHead(403);
+			response.end("Forbidden");
+			return;
+		}
+
+		fs.readFile(filePath, (error, data) => {
+			if (error) {
+				response.writeHead(404);
+				response.end("Not found");
+				return;
+			}
+
+			response.writeHead(200, {
+				"Content-Type": mimeTypes[path.extname(filePath)] || "application/octet-stream"
+			});
+			response.end(data);
+		});
+	});
+
+	return new Promise(resolve => {
+		server.listen(0, "127.0.0.1", () => resolve(server));
+	});
+}
+
+async function main() {
+	let chromium;
+	try {
+		({ chromium } = require("playwright"));
+	} catch (error) {
+		throw new Error("Playwright is required. Install it or run with a Codex runtime that provides it.");
+	}
+
+	const server = await createServer();
+	const port = server.address().port;
+	const executablePath = resolveChromePath();
+	const launchOptions = { headless: true };
+	if (executablePath) {
+		launchOptions.executablePath = executablePath;
+	}
+
+	let browser;
+	try {
+		browser = await chromium.launch(launchOptions);
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		const errors = [];
+		page.on("pageerror", error => errors.push(error.message));
+
+		await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
+		await page.waitForFunction(() => window.session && typeof window.session.remoteInterfaceAPI === "function" && window.Commands, null, { timeout: 30000 });
+
+		const calls = await page.evaluate(() => {
+			const captured = [];
+			window.targetGuest = function (target, action, value, value2) {
+				captured.push({ type: "targetGuest", target, action, value, value2 });
+				return "targetGuestReturn";
+			};
+			window.Commands.__loopBridgeTest = function (value, value2) {
+				captured.push({ type: "command", value, value2 });
+				return "commandReturn";
+			};
+			const originalPostMessage = window.postMessage;
+			window.postMessage = function () {};
+
+			window.session.remoteInterfaceAPI({
+				data: {
+					function: "targetGuest",
+					target: "guest-stream",
+					action: "mute",
+					value: true,
+					value2: "extra"
+				}
+			});
+			window.session.remoteInterfaceAPI({
+				data: {
+					function: "commands",
+					action: "__loopBridgeTest",
+					value: "primary",
+					value2: "secondary"
+				}
+			});
+
+			window.postMessage = originalPostMessage;
+			delete window.Commands.__loopBridgeTest;
+			return captured;
+		});
+
+		assertEqual("call count", calls.length, 2);
+		assertEqual("targetGuest type", calls[0].type, "targetGuest");
+		assertEqual("targetGuest target", calls[0].target, "guest-stream");
+		assertEqual("targetGuest action", calls[0].action, "mute");
+		assertEqual("targetGuest value", calls[0].value, true);
+		assertEqual("targetGuest value2", calls[0].value2, "extra");
+		assertEqual("command type", calls[1].type, "command");
+		assertEqual("command value", calls[1].value, "primary");
+		assertEqual("command value2", calls[1].value2, "secondary");
+
+		if (errors.length) {
+			throw new Error(`page errors: ${errors.join("\n")}`);
+		}
+
+		console.log("Iframe API bridge verified.");
+		console.log(`Calls: ${calls.map(call => call.type).join(", ")}`);
+	} finally {
+		if (browser) {
+			await browser.close();
+		}
+		server.close();
+	}
+}
+
+main().catch(error => {
+	console.error(error.message);
+	process.exit(1);
+});

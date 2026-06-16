@@ -42488,15 +42488,17 @@ function loadIframe(iframesrc, target) {
 	return iframe;
 }
 
+var loopVisibleHomeCards = ["container-5", "container-7"];
+
 function dropDownButtonAction(ele) {
 	var ele = getById("dropButton");
 	if (ele) {
 		ele.parentNode.removeChild(ele);
-		//getById('container-5').classList.remove('hidden');
-		//getById('container-8').classList.remove('hidden');
-		//getById('container-6').classList.remove('hidden');
-		document.querySelectorAll("div.column.card").forEach(child => {
-			child.classList.remove("hidden");
+		loopVisibleHomeCards.forEach(cardId => {
+			var card = document.getElementById(cardId);
+			if (card) {
+				card.classList.remove("hidden");
+			}
 		});
 	}
 }

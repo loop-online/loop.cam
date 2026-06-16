@@ -8326,3 +8326,34 @@ video.viewchroma-source-hidden {
     visibility: hidden !important;
     pointer-events: none !important;
 }
+
+/* Loop Cam surface overrides.
+   Keep this block small and product-facing so upstream CSS refreshes stay mechanical. */
+:root {
+	--background-color: #171717;
+	--dark-background-color: #171717;
+}
+
+#header {
+	background-color: #171717;
+}
+
+.column {
+	transition: all 0.1s ease-in-out;
+	border-radius: 16px;
+	background-color: var(--discord-grey-7);
+}
+
+#container-1,
+#container-2,
+#container-3,
+#container-3a,
+#container-4,
+#container-5 {
+	border-radius: 20px !important;
+}
+
+.darktheme .card,
+.card {
+	border-radius: 16px;
+}
