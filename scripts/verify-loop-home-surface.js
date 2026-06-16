@@ -119,6 +119,12 @@ async function main() {
 			);
 
 			const before = await visibleCards();
+			const dropButton = await page.$eval("#dropButton", element => ({
+				ariaHidden: element.getAttribute("aria-hidden"),
+				ariaLabel: element.getAttribute("aria-label") || "",
+				role: element.getAttribute("role") || ""
+			}));
+			const createRoomHeading = await page.$eval("#container-1 [data-translate='add-group-chat']", element => element.textContent.replace(/\s+/g, " ").trim());
 			await page.click("#dropButton");
 			const after = await visibleCards();
 			const advanced = await page.$$eval("#container-15, #container-16, #container-17, #container-20", elements =>
@@ -136,6 +142,12 @@ async function main() {
 
 			assertEqual("default visible cards", before, expectedBefore);
 			assertEqual("post-more-options visible cards", after, expectedAfter);
+			assertEqual("create room heading", createRoomHeading, "Create a Room");
+			assertEqual("drop button role", dropButton.role, "button");
+			assertEqual("drop button aria-label", dropButton.ariaLabel, "More options");
+			if (dropButton.ariaHidden === "true") {
+				throw new Error("drop button should not be aria-hidden");
+			}
 			assertExcludes("initial home surface", initialSurfaceText, "params.vdo.ninja");
 			assertExcludes("room tips text", roomNotes.text, "Advanced URL parameters");
 			assertExcludes("room tips links", roomNotes.links.join(" "), "params.vdo.ninja");

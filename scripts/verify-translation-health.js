@@ -6,6 +6,11 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const files = ["translations/en.json", "translations/blank.json"];
 const translatedMarkupFiles = ["index.html"];
+const promotedInnerHTML = {
+	"add-group-chat": "Create a Room",
+	"add-your-camera": "Share Camera",
+	"remote-screenshare-obs": "Share Screen"
+};
 
 function readJsonString(source, start) {
 	let value = "";
@@ -132,6 +137,56 @@ function getExpectedDataTranslateKeys() {
 	return [...keys].sort();
 }
 
+function assertPromotedInnerHTML(file, data) {
+	const translations = data.innerHTML && typeof data.innerHTML === "object" && !Array.isArray(data.innerHTML)
+		? data.innerHTML
+		: {};
+	for (const [key, expected] of Object.entries(promotedInnerHTML)) {
+		if (translations[key] !== expected) {
+			throw new Error(`${file} innerHTML.${key} should be "${expected}", got: ${translations[key]}`);
+		}
+	}
+}
+
+function findCrossSectionCollisions(data, keysToCheck) {
+	const innerHTML = data.innerHTML && typeof data.innerHTML === "object" && !Array.isArray(data.innerHTML)
+		? data.innerHTML
+		: {};
+	const titles = data.titles && typeof data.titles === "object" && !Array.isArray(data.titles)
+		? data.titles
+		: {};
+	const collisions = [];
+
+	for (const key of keysToCheck) {
+		if (!Object.prototype.hasOwnProperty.call(innerHTML, key)) {
+			continue;
+		}
+		if (!Object.prototype.hasOwnProperty.call(titles, key)) {
+			continue;
+		}
+		if (innerHTML[key] !== titles[key]) {
+			collisions.push({
+				key,
+				innerHTML: innerHTML[key],
+				titles: titles[key]
+			});
+		}
+	}
+
+	return collisions;
+}
+
+function assertNoCrossSectionCollisions(file, data) {
+	const collisions = findCrossSectionCollisions(data, Object.keys(promotedInnerHTML));
+	if (!collisions.length) {
+		return;
+	}
+	const details = collisions
+		.map(collision => `${collision.key}: innerHTML=${JSON.stringify(collision.innerHTML)} titles=${JSON.stringify(collision.titles)}`)
+		.join("\n");
+	throw new Error(`${file} has promoted home keys with conflicting innerHTML/titles values:\n${details}`);
+}
+
 function assertDataTranslateCoverage(file, data, expectedKeys) {
 	const translations = data.innerHTML && typeof data.innerHTML === "object" && !Array.isArray(data.innerHTML)
 		? data.innerHTML
@@ -160,7 +215,9 @@ function main() {
 
 		const data = JSON.parse(source);
 		assertLoopHeader(relativePath, data);
+		assertPromotedInnerHTML(relativePath, data);
 		assertDataTranslateCoverage(relativePath, data, expectedKeys);
+		assertNoCrossSectionCollisions(relativePath, data);
 	}
 
 	if (failures.length) {

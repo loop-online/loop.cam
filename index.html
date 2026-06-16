@@ -31,7 +31,7 @@
 				transition: opacity .1s linear;
 			}
 		</style>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
 		<meta content="utf-8" http-equiv="encoding" />
 		<meta name="robots" content="index, follow">
@@ -1012,7 +1012,7 @@
 				</div>
 			</div>
 			
-			<div id="dropButton" onclick="dropDownButtonAction()" title="More Options" aria-hidden="true"><i class="las la-chevron-down" ></i></div>
+			<div id="dropButton" onclick="dropDownButtonAction()" title="More Options" role="button" tabindex="0" aria-label="More options" onkeyup="enterPressedClick(event,this);"><i class="las la-chevron-down" aria-hidden="true"></i></div>
 			
 			<div id="container-5" class="column columnfade pointer card hidden" style=" overflow-y: auto;">
 				<h2><span data-translate="share-local-video-file">Stream Media File</span></h2>

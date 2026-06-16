@@ -80,6 +80,12 @@ function assertTranslationContract(relativePath) {
 		placeholders: new Set(),
 		miscellaneous: new Set()
 	};
+	const allowedRemoved = {
+		titles: new Set(["add-group-chat"]),
+		innerHTML: new Set(),
+		placeholders: new Set(),
+		miscellaneous: new Set()
+	};
 	const expectedAddedInnerHTML = dataTranslateKeys
 		.filter(key => !Object.prototype.hasOwnProperty.call(upstream.innerHTML || {}, key))
 		.sort();
@@ -88,7 +94,8 @@ function assertTranslationContract(relativePath) {
 		const currentKeys = objectKeys(current[section]);
 		const upstreamKeys = objectKeys(upstream[section]);
 		const removed = setDifference(upstreamKeys, currentKeys);
-		assert(!removed.length, `${relativePath} removed upstream ${section} keys:\n${removed.join("\n")}`);
+		const unexpectedRemoved = removed.filter(key => !allowedRemoved[section].has(key));
+		assert(!unexpectedRemoved.length, `${relativePath} removed upstream ${section} keys:\n${unexpectedRemoved.join("\n")}`);
 
 		const added = setDifference(currentKeys, upstreamKeys).sort();
 		if (section === "innerHTML") {
@@ -166,7 +173,7 @@ function main() {
 	console.log("Fork contract verified.");
 	console.log(`Upstream ref: ${upstreamRef}`);
 	console.log(`Allowed high-risk overlays: ${[...allowedHighRiskDiffs].sort().join(", ")}`);
-	console.log("Translations preserve upstream keys and only apply explicit Loop overrides.");
+	console.log("Translations preserve upstream keys except documented Loop removals and overrides.");
 }
 
 main();
