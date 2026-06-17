@@ -439,8 +439,15 @@
 										<div id="passwordRoomSSONote" style="display:none; margin-top:6px; font-size:0.85em; opacity:0.9;">SSO rooms use a managed room secret. Manual room password is disabled.</div>
 									</th>
 								</tr>
+								<tr>
+									<th colspan="3" style="text-align:left; padding-top:16px;">
+										<button type="button" class="loop-disclosure-toggle" aria-expanded="false" aria-controls="roomAdvanced" onclick="var x=this.getAttribute('aria-expanded')==='true'; document.getElementById('roomAdvanced').toggleAttribute('hidden', x); this.setAttribute('aria-expanded', String(!x));">Advanced room options</button>
+									</th>
+								</tr>
+								</tbody>
+								<tbody id="roomAdvanced" class="loop-room-advanced" hidden>
 								<tr >
-							
+
 								<th style="text-align:right; padding: 5px; padding-top: 20px;">
 									<input id="broadcastFlag" type="checkbox" title="For large group rooms, this option can reduce the load on remote guests substantially" />
 								</th><th style="text-align:left;; padding-top: 20px;">
@@ -516,6 +523,7 @@
 											</b>
 										</th>
 									</tr>
+									</tbody>
 									</table>
 							<button onclick="createRoom()"  class="gobutton gowebcam" style="width: 480px;display: block;margin: 20px auto;" alt="Enter the room as the group's director" title="You'll enter as the room's director">
 								<span data-translate="enter-the-rooms-control">Enter the room's Control Center in the director's role</span>

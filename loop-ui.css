@@ -1262,3 +1262,40 @@ input.gobutton {
 #subControlButtons :is(.loop-icon-upgraded, .toggleSize.las) {
 	font-size: 0 !important;
 }
+
+/* Create-a-Room advanced-options disclosure: collapses SSO, codec, broadcast,
+   director-performs, and approval controls off the default room surface. */
+.loop-disclosure-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 8px 14px;
+	font: inherit;
+	color: var(--loop-ui-text);
+	background: transparent;
+	border: 1px solid var(--loop-ui-border);
+	border-radius: var(--loop-ui-radius-sm);
+	cursor: pointer;
+	transition: border-color var(--loop-ui-transition);
+}
+
+.loop-disclosure-toggle:hover {
+	border-color: var(--loop-ui-accent);
+}
+
+.loop-disclosure-toggle:focus-visible {
+	outline: 2px solid var(--loop-ui-accent);
+	outline-offset: 2px;
+}
+
+.loop-disclosure-toggle::after {
+	content: "\203A";
+	font-size: 1.2em;
+	line-height: 1;
+	transition: transform var(--loop-ui-transition);
+}
+
+.loop-disclosure-toggle[aria-expanded="true"]::after {
+	transform: rotate(90deg);
+}
