@@ -429,7 +429,7 @@
 	height: 5px;
 	max-width: 2.5rem;
 	margin: 0;
-	border-radius: 999px;
+	border-radius: var(--loop-ui-radius-pill);
 }
 
 :is(.in-animation, .skip-animation) #audioMenu .meter,
@@ -831,7 +831,7 @@
 	align-items: center;
 	gap: 0.15rem;
 	padding: 0.2rem 0.35rem;
-	border-radius: 999px;
+	border-radius: var(--loop-ui-radius-pill);
 	background: rgb(23 23 23 / 0.88);
 	border: 1px solid var(--loop-ui-border);
 	backdrop-filter: blur(8px);
@@ -853,7 +853,7 @@
 	justify-content: center;
 	width: 44px;
 	height: 44px;
-	border-radius: 10px;
+	border-radius: var(--loop-ui-radius-sm);
 	cursor: pointer;
 	color: var(--loop-ui-muted);
 	transition: background var(--loop-ui-transition), color var(--loop-ui-transition);

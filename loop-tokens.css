@@ -17,6 +17,7 @@
 	--loop-ui-radius-sm: 8px;
 	--loop-ui-radius-md: 12px;
 	--loop-ui-radius-lg: 16px;
+	--loop-ui-radius-pill: 999px;
 	--loop-ui-panel-width: min(480px, calc(100vw - 32px));
 	--loop-ui-expanded-max: 560px;
 	--loop-ui-close-size: 44px;
