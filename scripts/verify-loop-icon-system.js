@@ -157,6 +157,15 @@ if (unmapped.length) {
 	throw new Error(`Unmapped Line Awesome icons on promoted surfaces: ${unmapped.join(", ")}`);
 }
 
+eval(glyphsSource);
+const glyphs = globalThis.LoopIconGlyphs;
+assert(glyphs && typeof glyphs === "object", "loop-icon-glyphs.js must define LoopIconGlyphs");
+const glyphless = [...new Set([...used].map(name => map[name]))].filter(lucide => !glyphs[lucide]).sort();
+if (glyphless.length) {
+	throw new Error(`Mapped icons missing a Lucide glyph (runtime upgrade would no-op): ${glyphless.join(", ")}`);
+}
+console.log(`Verified Lucide glyph presence for ${used.size} used Line Awesome hooks (incl. JS-injected).`);
+
 const wiredHtmlPages = [
 	"index.html",
 	"room.html",
