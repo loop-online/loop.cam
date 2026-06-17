@@ -47978,18 +47978,15 @@ async function requestBasicPermissions(constraint = { video: true, audio: true }
 									if (window.obsstudio) {
 										warnUser("Permissions denied.\n\nTo access the camera or microphone from within OBS, please refer to:\n<a href='https://docs.vdo.ninja/guides/share-webcam-from-inside-obs'>docs.vdo.ninja/guides/share-webcam-from-inside-obs</a>.", false, false);
 									} else if (ChromiumVersion && !session.mobile) {
-										warnUser("<h1>Camera/mic permissions denied</h1>\nPlease ensure you have allowed the mic/camera permissions in your browser, such as like:\n\n<img src='./media/permissions_chrome.jpg' style='max-height:50vh;' />\n\nFor further help on how to resolve this issue, please refer to:\n\n<a target='_blank' href='https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions'>https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions</a>.", false, false);
+										warnUser(typeof window.loopCamPermissionDeniedHtml === "function" ? window.loopCamPermissionDeniedHtml() : "Camera and microphone access was blocked. Allow permissions in your browser settings and reload.", false, false);
 									} else if (Firefox && session.mobile) {
-										warnUser(
-											"<h3>Camera/mic permission denied</h3>\nPlease allow mic/camera access.\n\n\
-								If not prompted, go to Settings -> Site permissions -> exceptions (at bottom) -> vdo.ninja, and then manually enable the permissions.\n\n\
-								If Firefox still gives you issues, try in incognito mode or a different browser.\
-								For further help, please refer to:\n\n<a target='_blank' href='https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions'>https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions</a>.",
-											false,
-											false
-										);
+																			warnUser(
+										typeof window.loopCamPermissionDeniedHtml === "function" ? window.loopCamPermissionDeniedHtml() : "Camera and microphone access was blocked. Allow permissions in your browser settings and reload.",
+										false,
+										false
+									);
 									} else {
-										warnUser("Permission access to the camera or microphone was denied.\n\nPlease ensure you have allowed the mic/camera permissions in your browser.\n\nFor guides on how to resolve this issue, please refer to:\n\n<a target='_blank' href='https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions'>https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions</a>.", false, false);
+										warnUser(typeof window.loopCamPermissionDeniedHtml === "function" ? window.loopCamPermissionDeniedHtml() : "Camera and microphone access was blocked. Allow permissions in your browser settings and reload.", false, false);
 									}
 								}, 1);
 							}

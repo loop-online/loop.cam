@@ -1,20 +1,17 @@
 /* Loop Cam icon system — Lucide SVG rendered into upstream Line Awesome hooks. */
 
 :root {
-	--loop-icon-size-sm: 1em;
-	--loop-icon-size-md: 1.25em;
+	--loop-icon-size-sm: 1rem;
+	--loop-icon-size-md: 1.25rem;
 	--loop-icon-size-lg: 2rem;
 	--loop-icon-size-toggle: 28px;
 	--loop-home-icon-size: 80px;
 	--loop-home-icon-top: 65%;
 	--loop-icon-muted: var(--muted-icon, #c8ccd4);
 	--loop-icon-on-surface: var(--discord-text, #e8eaed);
-	--loop-toolbar-cell: 45px;
-	--loop-toolbar-gap: 5px;
 	--mic-meter-color: #64c04d;
 }
 
-/* Shared upgraded / SVG host */
 :is(i.las.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg), .loop-home-card-icon) {
 	display: inline-flex;
 	align-items: center;
@@ -36,7 +33,6 @@ i.lar:has(> svg.loop-icon-svg)::before {
 	display: none !important;
 }
 
-/* Hide legacy CSS chevron triangles when Line Awesome chevrons are present */
 i.las.chevron::before {
 	display: none !important;
 	content: none !important;
@@ -44,13 +40,12 @@ i.las.chevron::before {
 }
 
 .loop-icon-svg {
-	width: 1em;
-	height: 1em;
+	width: var(--loop-icon-size-md);
+	height: var(--loop-icon-size-md);
 	display: block;
 	overflow: visible;
 }
 
-/* Control bar toggles */
 :is(.toggleSize.loop-icon-upgraded, .toggleSize.las:has(> svg.loop-icon-svg), .toggleSize.las) {
 	width: var(--loop-icon-size-toggle);
 	height: var(--loop-icon-size-toggle);
@@ -70,18 +65,20 @@ i.las.chevron::before {
 
 #subControlButtons > div.float,
 #subControlButtons > div.float.hidden,
-#subControlButtons > div.task {
+#subControlButtons > div.task,
+#subControlButtons > div.float2 {
 	overflow: visible;
 }
 
 #subControlButtons > div.float > .toggleSize,
 #subControlButtons > div.float.hidden > .toggleSize,
-#subControlButtons > div.task > .toggleSize {
+#subControlButtons > div.task > .toggleSize,
+#subControlButtons > div.float2 > .toggleSize {
 	max-width: 100%;
 	max-height: 100%;
 }
 
-:is(.float, #subControlButtons > .float, #subControlButtons > .float.hidden, #subControlButtons > .task)
+:is(.float, #subControlButtons > .float, #subControlButtons > .float.hidden, #subControlButtons > .task, #subControlButtons > .float2)
 	> :is(.loop-icon-upgraded, .toggleSize.las:has(> svg.loop-icon-svg), .toggleSize.las) {
 	pointer-events: none;
 }
@@ -122,7 +119,6 @@ i.las.chevron::before {
 	opacity: 0;
 }
 
-/* Inline content spacing */
 h2 :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
 h3 :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
 .guest-tip-item :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
@@ -158,7 +154,6 @@ label > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)):first-child {
 	color: var(--a-dark-hover);
 }
 
-/* Affordance hooks */
 .loop-affordance-close,
 .loop-affordance-expand,
 .loop-affordance-dropdown,
@@ -168,10 +163,11 @@ label > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)):first-child {
 	justify-content: center;
 	width: var(--loop-icon-size-md);
 	height: var(--loop-icon-size-md);
-	font-size: var(--loop-icon-size-md) !important;
+	font-size: 0 !important;
 	vertical-align: middle;
 	flex-shrink: 0;
 	cursor: pointer;
+	overflow: hidden;
 }
 
 .loop-affordance-close .loop-icon-svg,
@@ -182,11 +178,14 @@ label > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)):first-child {
 	height: var(--loop-icon-size-md);
 }
 
+.loop-video-source-row .loop-settings-gear {
+	position: static;
+}
+
 button.toggleSettings .loop-affordance-close {
 	margin-inline-end: 0.35em;
 }
 
-/* Dropdown chevrons: lib.js toggles .bottom (collapsed = down, open = up) */
 i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
 	transform: rotate(180deg);
 }
@@ -195,7 +194,6 @@ i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
 	margin-inline-start: auto;
 }
 
-/* Settings / camera / popup surfaces */
 #gear_webcam i.las,
 #gear_webcam3 i.las,
 #refreshVideoButton i.las,
@@ -205,19 +203,26 @@ i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
 #add_camera_inner .startupWarning > i.las {
 	width: var(--loop-icon-size-md);
 	height: var(--loop-icon-size-md);
-	font-size: var(--loop-icon-size-md) !important;
+	font-size: 0 !important;
 }
 
 #shareScreenGear i.las,
 #popupSelector_constraints_loading i.las {
 	width: var(--loop-icon-size-lg);
 	height: var(--loop-icon-size-lg);
-	font-size: var(--loop-icon-size-lg) !important;
+	font-size: 0 !important;
 }
 
-#refreshVideoButton > i.las {
-	position: relative;
-	top: 3px;
+.loop-footer-btn :is(i.las.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)) {
+	width: 1.25rem;
+	height: 1.25rem;
+	font-size: 0 !important;
+}
+
+.loop-footer-btn .loop-icon-svg {
+	width: 1.25rem;
+	height: 1.25rem;
+	color: inherit;
 }
 
 #add_camera_inner .title > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
@@ -226,7 +231,6 @@ i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
 	vertical-align: -0.12em;
 }
 
-/* Home cards — Lucide only (legacy background-image removed from main.css) */
 #container-1.column:not(.in-animation):not(.skip-animation),
 #container-2.column:not(.in-animation):not(.skip-animation),
 #container-3.column:not(.in-animation):not(.skip-animation),

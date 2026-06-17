@@ -7,6 +7,24 @@
  *
  */
 /*jshint esversion: 6 */
+
+window.loopCamPermissionDeniedHtml = function loopCamPermissionDeniedHtml() {
+	return (
+		"<div class=\"loop-permission-modal\">" +
+		"<h2 class=\"loop-permission-modal__title\">Camera and microphone access blocked</h2>" +
+		"<p class=\"loop-permission-modal__lead\">Allow access in your browser&rsquo;s site settings for this page, then reload Loop Cam.</p>" +
+		"<ol class=\"loop-permission-modal__steps\">" +
+		"<li>Select the lock or site-controls icon in the address bar</li>" +
+		"<li>Set <strong>Camera</strong> and <strong>Microphone</strong> to Allow</li>" +
+		"<li>Reload this page and try again</li>" +
+		"</ol>" +
+		"<p class=\"loop-permission-modal__help\">" +
+		"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs.vdo.ninja/common-errors-and-known-issues/enable-camera-microphone-permissions\">Full troubleshooting guide</a>" +
+		"</p>" +
+		"</div>"
+	);
+};
+
 async function main() {
 	// main asyncronous thread; mostly initializes the user settings.
 
@@ -528,8 +546,7 @@ async function main() {
 				}
 				getById("qos").innerHTML = "";
 				getById("logoname").innerHTML = "";
-				getById("helpbutton").style.display = "none";
-				getById("helpbutton").style.opacity = 0;
+				getById("helpbutton").classList.add("hidden");
 				getById("reportbutton").style.display = "none";
 				getById("reportbutton").style.opacity = 0;
 				getById("dropButton").classList.add("hidden");
@@ -539,8 +556,7 @@ async function main() {
 				}
 				//getById("mainmenu").style.opacity = 1;
 				getById("mainmenu").style.margin = "30px 0";
-				getById("translateButton").style.display = "none";
-				getById("translateButton").style.opacity = 0;
+				getById("translateButton").classList.add("hidden");
 				// getById("legal").style.display = "none";
 				// getById("legal").style.opacity = 0;
 				getById("info").style.display = "none";
@@ -573,7 +589,7 @@ async function main() {
 
 			getById("qos").innerHTML = '<i class="las la-plug"></i>';
 			getById("logoname").innerHTML = getById("qos").outerHTML;
-			getById("helpbutton").style.display = "none";
+			getById("helpbutton").classList.add("hidden");
 			getById("reportbutton").style.display = "none";
 			getById("chatBody").innerHTML = "";
 			getById("qos").style.color = "#FFF7";
@@ -5636,12 +5652,10 @@ async function main() {
 	}
 
 	if (isIFrame) {
-		getById("helpbutton").style.display = "none";
-		getById("helpbutton").style.opacity = 0;
+		getById("helpbutton").classList.add("hidden");
 		getById("reportbutton").style.display = "none";
 		getById("reportbutton").style.opacity = 0;
-		getById("calendarButton").style.display = "none";
-		getById("calendarButton").style.opacity = 0;
+		getById("calendarButton").classList.add("hidden");
 		getById("chatBody").innerHTML = "";
 	}
 	
@@ -6121,22 +6135,20 @@ async function main() {
 	}
 
 	if (urlParams.has("hidetranslate")) {
-		getById("translateButton").style.display = "none";
+		getById("translateButton").classList.add("hidden");
 	}
 
 	if (session.cleanOutput) {
 		session.screensharebutton = false;
-		getById("translateButton").style.display = "none";
+		getById("translateButton").classList.add("hidden");
 		getById("credits").style.display = "none";
 		// getById("legal").style.display = "none";
 		getById("header").style.display = "none";
 		getById("controlButtons").classList.add("hidden");
-		getById("helpbutton").style.display = "none";
-		getById("helpbutton").style.opacity = 0;
+		getById("helpbutton").classList.add("hidden");
 		getById("reportbutton").style.display = "none";
 		getById("reportbutton").style.opacity = 0;
-		getById("calendarButton").style.display = "none";
-		getById("calendarButton").style.opacity = 0;
+		getById("calendarButton").classList.add("hidden");
 		document.documentElement.style.setProperty("--myvideo-background", "#0000");
 		var styleTmp = document.createElement("style");
 		styleTmp.innerHTML = `
@@ -7117,9 +7129,9 @@ async function main() {
 			//createRoom(director_room_input);
 			session.permaid = false; // used to avoid a trigger later on.
 		} else {
-			getById("container-1").className = "column columnfade hidden";
-			getById("container-4").className = "column columnfade hidden";
-			getById("dropButton").className = "column columnfade hidden";
+			getById("container-1").classList.add("hidden");
+			getById("container-4").classList.add("hidden");
+			getById("dropButton").classList.add("hidden");
 
 			getById("info").innerHTML = "";
 			if (session.videoDevice === 0) {
@@ -7146,9 +7158,11 @@ async function main() {
 
 			if (session.webcamonly == true) {
 				// mobile or manual flag 'webcam' pflag set
-				getById("head1").innerHTML = '<span style="color:#CCC;" data-translate="please-accept-permissions">- Please accept any camera permissions</span>';
+				getById("head1").innerHTML =
+					'<img src="./media/loop_logo.png" id="logo" alt="Loop Cam" /><p class="loop-home-prompt" data-translate="please-accept-permissions">Please accept any camera permissions</p>';
 			} else {
-				getById("head1").innerHTML = '<br /><span style="color:#CCC" data-translate="please-select-which-to-share">- Please select which you wish to share</span>';
+				getById("head1").innerHTML =
+					'<img src="./media/loop_logo.png" id="logo" alt="Loop Cam" /><p class="loop-home-prompt" data-translate="please-select-which-to-share">Please select which you wish to share</p>';
 			}
 
 			if (!session.cleanOutput) {
@@ -7852,8 +7866,8 @@ async function main() {
 		getById("videoname1").value = session.roomid;
 		getById("dirroomid").innerText = session.roomid;
 		getById("roomid").innerText = session.roomid;
-		getById("container-1").className = "column columnfade hidden";
-		getById("container-4").className = "column columnfade hidden";
+		getById("container-1").classList.add("hidden");
+		getById("container-4").classList.add("hidden");
 		// container 5 is share media file; 6 is share website
 		getById("container-7").style.display = "none";
 		getById("container-8").style.display = "none";
@@ -7876,9 +7890,11 @@ async function main() {
 
 		if (session.webcamonly == true) {
 			// mobile or manual flag 'webcam' pflag set
-			getById("head1").innerHTML = "";
+			getById("head1").innerHTML =
+				'<img src="./media/loop_logo.png" id="logo" alt="Loop Cam" /><p class="loop-home-prompt" data-translate="please-accept-permissions">Please accept any camera permissions</p>';
 		} else {
-			getById("head1").innerHTML = '<span style="color:#CCC" data-translate="please-select-option-to-join">Please select an option to join.</span>';
+			getById("head1").innerHTML =
+				'<img src="./media/loop_logo.png" id="logo" alt="Loop Cam" /><p class="loop-home-prompt" data-translate="please-select-option-to-join">Please select an option to join.</p>';
 		}
 
 		if (session.roomid.length > 0) {
@@ -7912,16 +7928,16 @@ async function main() {
 		getById("container-3").title = getById("add_camera").innerText;
 
 		if (session.scene !== false) {
-			getById("container-4").className = "column columnfade";
-			getById("container-3").className = "column columnfade";
-			getById("container-2").className = "column columnfade";
-			getById("container-1").className = "column columnfade";
+			getById("container-4").classList.remove("hidden");
+			getById("container-3").classList.remove("hidden");
+			getById("container-2").classList.remove("hidden");
+			getById("container-1").classList.remove("hidden");
 			getById("header").className = "hidden";
 			getById("info").className = "hidden";
 			getById("head1").className = "hidden";
 			getById("head2").className = "hidden";
 			getById("mainmenu").style.display = "none";
-			getById("translateButton").style.display = "none";
+			getById("translateButton").classList.add("hidden");
 			// getById("legal").style.display = "none";
 			log("Update Mixer Event on REsize SET");
 			window.onresize = updateMixer;
@@ -8020,7 +8036,7 @@ async function main() {
 			session.audioEffects = false;
 		}
 		log("Update Mixer Event on REsize SET");
-		getById("translateButton").style.display = "none";
+		getById("translateButton").classList.add("hidden");
 		// getById("legal").style.display = "none";
 		window.onresize = updateMixer;
 		window.onorientationchange = function () {
@@ -8112,10 +8128,10 @@ async function main() {
 	}
 
 	if ((((session.view!==false) || session.whepInput || session.whipView) && session.roomid === false) || (session.waitImage && session.scene !== false)) {
-		getById("container-4").className = "column columnfade";
-		getById("container-3").className = "column columnfade";
-		getById("container-2").className = "column columnfade";
-		getById("container-1").className = "column columnfade";
+		getById("container-4").classList.remove("hidden");
+		getById("container-3").classList.remove("hidden");
+		getById("container-2").classList.remove("hidden");
+		getById("container-1").classList.remove("hidden");
 		//getById("header").className = 'hidden';
 		getById("info").className = "hidden";
 		getById("header").className = "hidden";

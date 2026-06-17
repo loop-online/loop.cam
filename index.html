@@ -48,7 +48,9 @@
 		<meta name="msapplication-TileColor" content="#da532c" />
 		<meta name="theme-color" content="#0f131d" />
 		<link rel="stylesheet" href="./main.css?ver=4044" />
-		<link rel="stylesheet" href="./loop-icons.css?ver=10" />
+		<link rel="stylesheet" href="./loop-tokens.css?ver=1" />
+		<link rel="stylesheet" href="./loop-icons.css?ver=13" />
+		<link rel="stylesheet" href="./loop-ui.css?ver=12" />
 		<script type="text/javascript" crossorigin="anonymous" src="./thirdparty/adapter.js"></script>
 		
 		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
@@ -134,8 +136,8 @@
 					class="task grabLinks"
 					data-menu="context-menu"
 				></a>
-				<i class="las la-paperclip" style="color: #DDD;" title="Copy link to clipboard" onclick="copyFunction(document.getElementById('reshare'), event);" onmouseover="this.style.cursor='pointer'"></i>
-				<span title="Save and ask to reload the current page on next site visit" style='font-size:92%;' onclick="saveRoom(this);" onmouseover="this.style.cursor='pointer'">💾</span>
+				<button type="button" class="loop-header-action" aria-label="Copy link to clipboard" title="Copy link to clipboard" onclick="copyFunction(document.getElementById('reshare'), event);"><i class="las la-paperclip" aria-hidden="true"></i></button>
+				<button type="button" class="loop-header-action" title="Save and ask to reload the current page on next site visit" onclick="saveRoom(this);"><i class="las la-save" aria-hidden="true"></i></button>
 			</div>
 			<div id="head9" style="display: inline-block;" class="hidden">
 			
@@ -151,7 +153,7 @@
 					data-menu="context-menu"
 				></a>
 			
-				<i class="las la-paperclip" style="color: #DDD;" title="Copy link to clipboard" onclick="copyFunction(document.getElementById('inviteLinkURL'), event);" onmouseover="this.style.cursor='pointer'"></i>
+				<button type="button" class="loop-header-action" aria-label="Copy link to clipboard" title="Copy link to clipboard" onclick="copyFunction(document.getElementById('inviteLinkURL'), event);"><i class="las la-paperclip" aria-hidden="true"></i></button>
 				<span title="Save and ask to reload the current page on next site visit" style='font-size:92%;' onclick="showInviteQR();" onmouseover="this.style.cursor='pointer'"><i class="las la-qrcode" style="color: #DDD;   font-size: 160%; vertical-align: bottom;position: relative;top: 1px;" title="Show QR Code" ></i></span>
 				
 			</div>
@@ -160,7 +162,7 @@
 					<span data-translate="you-are-in-the-control-center">Control center for room:</span>
 					
 					<div id="dirroomid" style="font-size: 140%; color: #99c; display: inline-block;"></div>
-					<span id="saveRoom" onclick="saveRoom(this)" style='cursor:pointer;margin-left:10px;' title="Will remember the room, prompting you the next time you visit if you wish to load this director's room again">💾</span>
+					<button type="button" id="saveRoom" class="loop-header-action" onclick="saveRoom(this)" title="Will remember the room, prompting you the next time you visit if you wish to load this director's room again"><i class="las la-save" aria-hidden="true"></i></button>
 					<span id="togglePreviewMode" onclick="switchModes()" style='cursor:pointer;margin-left:2px;' title="Toggle between the director control-room view and a scene preview-mode.">🪟</span>
 					<i id="meshDebugBtn" class="las la-project-diagram" role="button" tabindex="0" aria-label="Open mesh network debug visualization" onclick="openMeshVisualization()" style="cursor:pointer;margin-left:3px;color:#DDD;font-size: 130%; vertical-align: bottom;" title="Open mesh network debug visualization to see P2P connections between guests"></i>
 				</span>
@@ -178,8 +180,8 @@
 			<div class="chat-header">
 				<span>Chat</span>
 				<span>
-					<a id="popOutChat" onclick="createPopoutChat();"><i class="las la-external-link-alt"></i></a>
-					<a id="closeChat" onclick="toggleChat();">x</i></a>
+					<button type="button" id="popOutChat" title="Pop out chat" onclick="createPopoutChat();"><i class="las la-external-link-alt" aria-hidden="true"></i></button>
+					<button type="button" id="closeChat" title="Close chat" onclick="toggleChat();"><i class="las la-times loop-affordance-close" aria-hidden="true"></i></button>
 				</span>
 			</div>
 			
@@ -350,9 +352,9 @@
 				</div>
 				<div id="joinRequestList"></div>
 			</div>
-			<span id="miniTaskBar" style="float: right; bottom: 0px;right:0; position:fixed; display:flex;">
-			<div id="closedList_connectUsers" class="hidden"  onclick="getById('connectUsers').classList.remove('hidden');getById('closedList_connectUsers').classList.add('hidden');">
-				<i class="las la-theater-masks"></i>
+			<span id="miniTaskBar" class="loop-footer-bar">
+			<div id="closedList_connectUsers" class="hidden loop-footer-btn"  onclick="getById('connectUsers').classList.remove('hidden');getById('closedList_connectUsers').classList.add('hidden');">
+				<i class="las la-theater-masks" aria-hidden="true"></i>
 			</div>
 			<div class="footer hidden" id="legal" aria-hidden="true">
 				<a href="https://docs.vdo.ninja/help/privacy-and-security-details/vdo.ninja-terms-of-service" aria-hidden="true" target="_blank" alt="Terms of Service" title="Opens in new window">Terms of Service</a> | 
@@ -364,11 +366,11 @@
 					title="Submit any error logs" 
 					onclick="submitDebugLog();"
 					style="cursor: pointer;z-index:3;display:none;"
-					class="hidden"
+					class="hidden loop-footer-btn"
 					role="button" 
 					tabindex="3"
 				>
-				<i style="cursor: pointer; color: #d9e4eb; padding: 2px; margin: 2px 2px 0 0; font-size: 140%;" class="las la-bug" aria-hidden="true"></i>
+				<i class="las la-bug" aria-hidden="true"></i>
 			</span>
 			<span
 					id="helpbutton"
@@ -378,14 +380,15 @@
 					alt="How to Use This with OBS"
 					role="button" 
 					tabindex="3"
+					class="loop-footer-btn"
 				>
-				<i style="cursor: pointer;  color: #d9e4eb; padding: 2px; margin: 2px 2px 0 0; font-size: 140%;" class="las la-question-circle" aria-hidden="true"></i>
+				<i class="las la-question-circle" aria-hidden="true"></i>
 			</span>
-			<span title="Language options" onclick="toggle(document.getElementById('languages'));" tabindex="3" role="button" aria-label="language options" aria-pressed="false" id="translateButton">
-				<i style="cursor: pointer;color: #d9e4eb; padding: 2px; margin: 2px 2px 0 0; font-size: 140%;" class="las la-language" aria-hidden="true"></i>
+			<span title="Language options" onclick="toggle(document.getElementById('languages'));" tabindex="3" role="button" aria-label="language options" aria-pressed="false" id="translateButton" class="loop-footer-btn">
+				<i class="las la-language" aria-hidden="true"></i>
 			</span>
-			<span title="Add to Calendar" onclick="toggle(document.getElementById('calendar'));" tabindex="3" role="button" aria-label="Add to calendar" id="calendarButton">
-				<i style="cursor: pointer;  color: #d9e4eb; padding: 2px; margin: 2px 2px 0 0; font-size: 140%;" class="las la-calendar" aria-hidden="true"></i>
+			<span title="Add to Calendar" onclick="toggle(document.getElementById('calendar'));" tabindex="3" role="button" aria-label="Add to calendar" id="calendarButton" class="loop-footer-btn">
+				<i class="las la-calendar" aria-hidden="true"></i>
 			</span>
 		</span>
 		<div id="mainmenu" class="row" style="opacity: 0;">
@@ -590,7 +593,7 @@
 						<div class="title">
                             <i class="las la-video"></i><span data-translate="video-source"> Video Source </span>
                         </div>
-						<span style="display:inline-block;padding-top: 5px;">
+						<span class="loop-video-source-row">
 							<select id="videoSourceSelect" tabindex="1" title="Video source list"></select>
 							<span id="gear_webcam" class="loop-settings-gear" onclick="toggle(document.getElementById('videoSettings'));">
 								<i class="las la-cog" aria-hidden="true"></i>
@@ -642,8 +645,8 @@
 						<a id="multiselect-trigger" class="form-control multiselect-trigger" data-state="1">
 							<div class="title">
 								<i class="las la-microphone-alt"></i><span data-translate="select-audio-source"> Audio Source(s) </span>
-								<i id="chevarrow1" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 								<div class="meter" id="meter1"></div><div class="meter2" id="meter2"></div>
+								<i id="chevarrow1" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 							</div>
 						</a>
 						<ul id="audioSource" class="multiselect-contents" >
@@ -807,12 +810,14 @@
 						  <rect x="65" y="75" width="100" height="4" fill="#fff" opacity="0.3" rx="1"/>
 						</svg>
 					</div>
-					<button class='gobutton mainScreenShareButton' class="mainScreenShareButton" alt="clilck to select you screen to share" onclick="publishScreen()">
-						<span data-translate="select-screen-to-share">SELECT SCREEN TO SHARE</span>
-					</button>
-					<span title="Change the capture resolution. This defines what the maximum resolution the video can be encoded at. A lower resolution will be smoother." id="gear_screen" style="display: inline-block; cursor: pointer;" onclick="toggle(document.getElementById('videoSettings2'));">
-						<i class="las la-cog" style="font-size: 170%; vertical-align: middle;" aria-hidden="true"></i>
-					</span>
+					<div class="loop-share-screen-actions">
+						<button class="gobutton mainScreenShareButton" alt="clilck to select you screen to share" onclick="publishScreen()">
+							<span data-translate="select-screen-to-share">SELECT SCREEN TO SHARE</span>
+						</button>
+						<span title="Change the capture resolution. This defines what the maximum resolution the video can be encoded at. A lower resolution will be smoother." id="gear_screen" class="loop-settings-gear" onclick="toggle(document.getElementById('videoSettings2'));">
+							<i class="las la-cog" aria-hidden="true"></i>
+						</span>
+					</div>
 					<center>
 						<span id="videoSettings2" style="display: none;">
 							<form id="webcamquality2">
@@ -2272,7 +2277,7 @@
                     <div class="title">
                         <i class="las la-video"></i><span data-translate="video-source"> Video Source: </span>
                     </div>
-					<span>
+					<span class="loop-video-source-row">
 						<select id="videoSource3" ></select>			
 						<span id="refreshVideoButton" title="Activate or Reload this video device.">
 							<i class="las la-sync-alt"></i>
@@ -2326,8 +2331,8 @@
 					<a id="multiselect-trigger3" class="form-control multiselect-trigger" >
 						<div id="title" class="title">
 							<i class="las la-microphone-alt"></i><span data-translate="select-audio-source"> Audio Source(s) </span>
-							<i id="chevarrow2" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 							<div class="meter" id="meter3"></div><div class="meter2" id="meter4"></div>
+							<i id="chevarrow2" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 						</div>
 					</a>
 					<ul id="audioSource3" class="multiselect-contents">
@@ -3427,11 +3432,11 @@
 					})();
 				</script>
 
-		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-glyphs.js?ver=3"></script>
-		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-line-map.js?ver=3"></script>
-		<script type="text/javascript" crossorigin="anonymous" src="./loop-icons.js?ver=10"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-glyphs.js?ver=7"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-line-map.js?ver=7"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icons.js?ver=12"></script>
 		<script type="text/javascript" crossorigin="anonymous" id="lib-js" src="./lib.js?ver=1417"></script>
-		<script type="text/javascript" crossorigin="anonymous" id="main-js" src="./main.js?ver=1065"></script>
+		<script type="text/javascript" crossorigin="anonymous" id="main-js" src="./main.js?ver=1066"></script>
 		<script type="module" src="./podcast/bootstrap.js"></script>
 		
 	</body>

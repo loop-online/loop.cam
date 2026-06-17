@@ -10,11 +10,10 @@
 	var HOME_CARD_ICONS = {
 		"container-1": "LayoutGrid",
 		"container-2": "Monitor",
-		"container-3": "Video",
+		"container-3": "Webcam",
 		"container-3a": "Mic"
 	};
 	var HOME_CARD_SCALE = {
-		Video: 1.12,
 		Mic: 1.05
 	};
 
@@ -40,13 +39,22 @@
 		return token ? LINE_MAP[token] || null : null;
 	}
 
-	function opticalTransform(lucideName, usePairScale, host) {
+	function isAffordanceHost(host) {
+		if (!host || !host.closest) {
+			return false;
+		}
+		return !!host.closest(
+			".loop-settings-gear, .loop-affordance-close, .loop-affordance-expand, .loop-affordance-dropdown"
+		);
+	}
+
+	function opticalTransform(lucideName, useNormalizedScale, host) {
 		var data = OPTICAL[lucideName];
 		if (!data) {
 			return "";
 		}
-		var scale = usePairScale ? (data.pairScale || data.scale) : data.scale;
-		if (usePairScale) {
+		var scale = useNormalizedScale ? (data.toggleScale || data.pairScale || data.scale) : data.scale;
+		if (useNormalizedScale) {
 			scale = Math.min(global.LoopIcons && global.LoopIcons.toggleMaxScale || 1.35, scale);
 		}
 		if (host && host.classList && host.classList.contains("loop-home-card-icon") && HOME_CARD_SCALE[lucideName]) {
@@ -63,7 +71,10 @@
 		if (host.classList.contains("loop-home-card-icon")) {
 			return false;
 		}
-		return host.classList.contains("toggleSize");
+		if (host.classList.contains("toggleSize") || isAffordanceHost(host)) {
+			return true;
+		}
+		return false;
 	}
 
 	function renderLucideSvg(host, lucideName) {

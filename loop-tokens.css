@@ -1,0 +1,33 @@
+/* Loop Cam design tokens — isolated from upstream VDO.Ninja refresh variables */
+
+:root {
+	--loop-accent: #64c04d;
+	--loop-accent-hover: #72cc58;
+	--loop-accent-active: #58a843;
+	--loop-accent-ink: #111;
+
+	--loop-ui-bg: #171717;
+	--loop-ui-surface: var(--discord-grey-7, #2f3136);
+	--loop-ui-surface-raised: var(--discord-grey-5, #383a40);
+	--loop-ui-border: #4a4d55;
+	--loop-ui-text: var(--discord-text, #e8eaed);
+	--loop-ui-muted: #a8b0bd;
+	--loop-ui-accent: var(--loop-accent);
+
+	--loop-ui-radius-sm: 8px;
+	--loop-ui-radius-md: 12px;
+	--loop-ui-radius-lg: 16px;
+	--loop-ui-panel-width: min(480px, calc(100vw - 32px));
+	--loop-ui-expanded-max: 560px;
+	--loop-ui-close-size: 44px;
+	--loop-ui-transition: 160ms cubic-bezier(0.22, 1, 0.36, 1);
+
+	--loop-toolbar-cell: 45px;
+	--loop-toolbar-gap: 5px;
+
+	--loop-z-dropdown: 10;
+	--loop-z-sticky: 20;
+	--loop-z-modal-backdrop: 40;
+	--loop-z-modal: 50;
+	--loop-z-toast: 60;
+}

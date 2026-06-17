@@ -8327,6 +8327,7 @@ video.viewchroma-source-hidden {
 :root {
 	--background-color: #171717;
 	--dark-background-color: #171717;
+	--loop-accent: #64c04d;
 }
 
 #header,

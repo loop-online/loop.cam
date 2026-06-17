@@ -1,0 +1,1260 @@
+/* Loop Cam UI — layout, panels, and flow polish (loads after loop-tokens.css) */
+
+#mainmenu.row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(240px, 280px));
+	justify-content: center;
+	align-content: center;
+	gap: 1.25rem 1.5rem;
+	min-height: calc(100vh - 5.5rem);
+	min-height: calc(100dvh - 5.5rem);
+	height: auto !important;
+	margin-top: 0;
+	padding: 2rem 1rem 3.5rem;
+	box-sizing: border-box;
+}
+
+#mainmenu.row::after {
+	display: none;
+}
+
+#mainmenu #container-1 {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+#mainmenu #container-3 {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+#mainmenu #container-2 {
+	grid-column: 1 / -1;
+	grid-row: 2;
+	justify-self: center;
+}
+
+#mainmenu.row:has(#container-1.hidden) {
+	grid-template-columns: repeat(2, minmax(240px, 280px));
+	justify-content: center;
+}
+
+#mainmenu.row:has(#container-1.hidden) #container-3 {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+#mainmenu.row:has(#container-1.hidden) #container-2 {
+	grid-column: 2;
+	grid-row: 1;
+	justify-self: stretch;
+}
+
+@media (min-width: 960px) {
+	#mainmenu.row {
+		grid-template-columns: repeat(3, minmax(240px, 280px));
+	}
+
+	#mainmenu #container-1 {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	#mainmenu #container-3 {
+		grid-column: 2;
+		grid-row: 1;
+	}
+
+	#mainmenu #container-2 {
+		grid-column: 3;
+		grid-row: 1;
+		justify-self: stretch;
+	}
+
+	#mainmenu.row:has(#container-1.hidden) {
+		grid-template-columns: repeat(2, minmax(240px, 280px));
+	}
+
+	#mainmenu.row:has(#container-1.hidden) #container-3 {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	#mainmenu.row:has(#container-1.hidden) #container-2 {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: stretch;
+	}
+}
+
+#mainmenu.mainmenuclass.row {
+	display: grid !important;
+	width: 100%;
+	height: auto !important;
+}
+
+#container-2 .screenshare-icon {
+	display: none !important;
+}
+
+#main:not(:has(.in-animation)) #header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 1rem 1rem 0.25rem;
+	background: transparent !important;
+	border: 0;
+}
+
+#main:not(:has(.in-animation)) #logoname {
+	display: none;
+}
+
+#main:not(:has(.in-animation)) #head1 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 0.25rem 0 0.75rem;
+}
+
+#main:not(:has(.in-animation)) #head1 #logo {
+	height: 40px;
+	width: auto;
+	margin: 0;
+}
+
+#main:not(:has(.in-animation)) #head1 span {
+	color: var(--loop-ui-muted);
+	font-size: 0.9375rem;
+	line-height: 1.4;
+}
+
+.loop-home-prompt {
+	margin: 0.35rem 0 0;
+	color: var(--loop-ui-muted);
+	font-size: 0.9375rem;
+	line-height: 1.4;
+}
+
+#mainmenu .column.card:not(.in-animation):not(.skip-animation) {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	float: none;
+	margin: 0;
+	width: min(280px, calc(100vw - 2rem));
+	min-width: 240px;
+	height: auto;
+	min-height: 200px;
+	padding: 1.5rem 1.25rem 1.75rem;
+}
+
+#mainmenu .column.card:not(.in-animation):not(.skip-animation) > h2 {
+	margin: 0 0 0.25rem;
+	font-size: 1.05rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--loop-ui-text);
+}
+
+.darktheme #mainmenu .column.card:not(.in-animation):not(.skip-animation) > h2 {
+	color: var(--loop-ui-text);
+}
+
+:is(.in-animation, .skip-animation) {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch;
+	background: var(--loop-ui-bg) !important;
+	overflow-x: hidden !important;
+	overflow-y: auto !important;
+	padding: 0 !important;
+}
+
+:is(.in-animation, .skip-animation) > h2 {
+	position: sticky;
+	top: 0;
+	z-index: var(--loop-z-sticky, 20);
+	flex-shrink: 0;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 1.15rem 3.25rem 0.65rem;
+	box-sizing: border-box;
+	font-size: 1.35rem;
+	font-weight: 600;
+	letter-spacing: -0.02em;
+	text-align: center;
+	color: var(--loop-ui-text);
+	background: linear-gradient(to bottom, var(--loop-ui-bg) 75%, rgb(23 23 23 / 0));
+}
+
+.darktheme :is(.in-animation, .skip-animation) > h2 {
+	color: var(--loop-ui-text);
+}
+
+:is(.in-animation, .skip-animation) .container-inner {
+	display: block !important;
+	width: 100%;
+	max-width: var(--loop-ui-expanded-max);
+	margin: 0 auto 2rem;
+	padding: 0 1.25rem 2rem;
+	background: transparent !important;
+	min-height: auto;
+	box-shadow: none !important;
+	text-align: center;
+}
+
+:is(.in-animation, .skip-animation) .container-inner > div,
+:is(.in-animation, .skip-animation) .container-inner > span > div,
+:is(.in-animation, .skip-animation) .container-inner button:not(.gowebcam):not(.gobutton) {
+	box-shadow: none !important;
+}
+
+:is(.in-animation, .skip-animation) .outer.close {
+	display: flex !important;
+	position: fixed;
+	top: 0.85rem;
+	right: 0.85rem;
+	width: var(--loop-ui-close-size);
+	height: var(--loop-ui-close-size);
+	margin: 0;
+	z-index: 30;
+	align-items: center;
+	justify-content: center;
+	background: var(--loop-ui-surface-raised);
+	border: 1px solid var(--loop-ui-border);
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background var(--loop-ui-transition), border-color var(--loop-ui-transition);
+}
+
+:is(.in-animation, .skip-animation) .outer.close:hover {
+	background: var(--loop-ui-surface);
+	border-color: #6b7280;
+}
+
+:is(.in-animation, .skip-animation) .outer.close .labelclass {
+	display: none;
+}
+
+:is(.in-animation, .skip-animation) .outer.close .inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+:is(.in-animation, .skip-animation) .outer.close .inner::before,
+:is(.in-animation, .skip-animation) .outer.close .inner::after {
+	width: 18px;
+	height: 2px;
+	margin-left: -9px;
+	background: var(--loop-ui-text);
+}
+
+:is(.in-animation, .skip-animation) .outer.close:hover .inner::before,
+:is(.in-animation, .skip-animation) .outer.close:hover .inner::after {
+	transform: translateY(-50%) rotate(45deg);
+}
+
+:is(.in-animation, .skip-animation) .outer.close:hover .inner::before {
+	top: 50%;
+}
+
+:is(.in-animation, .skip-animation) .outer.close:hover .inner::after {
+	top: 50%;
+}
+
+:is(.in-animation, .skip-animation) :is(
+	#videoMenu,
+	#videoMenu2,
+	#videoMenu3,
+	#audioMenu,
+	#audioMenu2,
+	#effectsDiv,
+	#effectsDiv2,
+	#effectsDiv3,
+	#addPasswordBasic,
+	#headphonesDiv,
+	#headphonesDiv2,
+	#audioScreenShare1,
+	.info-box
+) {
+	display: block;
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	margin: 0.85rem auto 0;
+	padding: 0.75rem 0.85rem;
+	border-radius: var(--loop-ui-radius-sm);
+	border: 1px solid var(--loop-ui-border);
+	background: var(--loop-ui-surface-raised) !important;
+	box-shadow: none !important;
+	text-align: left;
+	box-sizing: border-box;
+	overflow: hidden;
+	width: 100% !important;
+	max-width: var(--loop-ui-panel-width) !important;
+}
+
+:is(.in-animation, .skip-animation) .title,
+#popupSelector .title {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.35rem 0.5rem;
+	width: 100%;
+	margin-bottom: 0.35rem;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: var(--loop-ui-text);
+}
+
+:is(.in-animation, .skip-animation) .title > :is(i.las, .loop-icon-upgraded) {
+	flex-shrink: 0;
+}
+
+.loop-video-source-row,
+:is(.in-animation, .skip-animation) #videoMenu > span,
+:is(.in-animation, .skip-animation) #videoMenu > span.loop-video-source-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 2rem;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding-top: 0.35rem;
+	box-sizing: border-box;
+}
+
+:is(.in-animation, .skip-animation) #videoSourceSelect,
+:is(.in-animation, .skip-animation) #videoSource3,
+.loop-video-source-row select {
+	grid-column: 1;
+	flex: none;
+	min-width: 0;
+	width: 100% !important;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.loop-video-source-row #gear_webcam,
+:is(.in-animation, .skip-animation) #gear_webcam,
+:is(.in-animation, .skip-animation) #gear_webcam3,
+#popupSelector #gear_webcam3,
+#popupSelector #refreshVideoButton {
+	grid-column: 2;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	position: static;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .multiselect-trigger {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .multiselect-trigger .title,
+#popupSelector #audioMenu2 .multiselect-trigger .title,
+#popupSelector .multiselect-trigger .title,
+#add_camera_inner #audioMenu .multiselect-trigger .title {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.35rem;
+	width: 100%;
+	box-sizing: border-box;
+	padding-right: 0;
+	position: relative;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .multiselect-trigger .title > span,
+#popupSelector .multiselect-trigger .title > span {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.chatBarInputButton:hover {
+	background: var(--loop-accent-hover, #72cc58) !important;
+	border-color: var(--loop-accent-hover, #72cc58) !important;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .loop-affordance-dropdown,
+#popupSelector #audioMenu2 .loop-affordance-dropdown,
+#popupSelector .loop-affordance-dropdown,
+#add_camera_inner #audioMenu .loop-affordance-dropdown {
+	position: static;
+	right: auto;
+	top: auto;
+	transform: none;
+	margin: 0 0 0 auto;
+	flex-shrink: 0;
+	width: 1.25rem;
+	height: 1.25rem;
+	overflow: hidden;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .meter,
+:is(.in-animation, .skip-animation) #audioMenu .meter2,
+#popupSelector .meter,
+#popupSelector .meter2,
+#add_camera_inner #audioMenu .meter,
+#add_camera_inner #audioMenu .meter2 {
+	position: static;
+	right: auto;
+	top: auto;
+	transform: none;
+	flex-shrink: 0;
+	height: 5px;
+	max-width: 2.5rem;
+	margin: 0;
+	border-radius: 999px;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .meter,
+#popupSelector .meter,
+#add_camera_inner #audioMenu .meter {
+	background: var(--loop-ui-accent) !important;
+}
+
+:is(.in-animation, .skip-animation) #audioMenu .meter2,
+#popupSelector .meter2,
+#add_camera_inner #audioMenu .meter2 {
+	background: #e0b341 !important;
+}
+
+:is(.in-animation, .skip-animation) #effectSelector,
+:is(.in-animation, .skip-animation) #passwordBasicInput,
+:is(.in-animation, .skip-animation) #outputSource,
+:is(.in-animation, .skip-animation) #outputSourceScreenshare {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+:is(.in-animation, .skip-animation) #container-2 .container-inner {
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+}
+
+:is(.in-animation, .skip-animation) #container-2 .screenshare-icon {
+	max-width: 12rem;
+	margin: 0.5rem auto 1rem;
+	opacity: 0.85;
+}
+
+.loop-share-screen-actions,
+:is(.in-animation, .skip-animation) #container-2 .loop-share-screen-actions {
+	display: flex;
+	align-items: stretch;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	margin: 0.75rem auto 0;
+}
+
+.loop-share-screen-actions .mainScreenShareButton,
+:is(.in-animation, .skip-animation) #container-2 .mainScreenShareButton {
+	flex: 1 1 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	max-width: none;
+	margin: 0;
+}
+
+.loop-share-screen-actions #gear_screen,
+:is(.in-animation, .skip-animation) #gear_screen {
+	flex-shrink: 0;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin: 0;
+	border-radius: var(--loop-ui-radius-sm);
+	border: 1px solid var(--loop-ui-border);
+	background: var(--loop-ui-surface-raised);
+	cursor: pointer;
+}
+
+:is(.in-animation, .skip-animation) #gear_screen i.las {
+	font-size: 0 !important;
+}
+
+:is(.in-animation, .skip-animation) .previewWebcam {
+	display: block;
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	margin: 0 auto 0.75rem;
+	border-radius: var(--loop-ui-radius-sm);
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	background: #000;
+}
+
+:is(.in-animation, .skip-animation) .gowebcam,
+:is(.in-animation, .skip-animation) .gobutton.gowebcam {
+	display: block;
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	margin: 0.75rem auto;
+	box-sizing: border-box;
+}
+
+:is(.in-animation, .skip-animation) #container-1 .container-inner {
+	text-align: left;
+}
+
+:is(.in-animation, .skip-animation) #container-1 table {
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+
+:is(.in-animation, .skip-animation) #container-1 .labelLarge {
+	display: none;
+}
+
+:is(.in-animation, .skip-animation) #container-1 tr {
+	display: block;
+	margin-bottom: 0.65rem;
+}
+
+:is(.in-animation, .skip-animation) #container-1 th {
+	display: block;
+	width: 100%;
+	text-align: left !important;
+	padding: 0 !important;
+	font-weight: 400;
+}
+
+:is(.in-animation, .skip-animation) #container-1 .labelSmall {
+	display: block;
+	margin-bottom: 0.25rem;
+	font-size: 0.875rem;
+	color: var(--loop-ui-muted);
+}
+
+:is(.in-animation, .skip-animation) #container-1 input[type="text"],
+:is(.in-animation, .skip-animation) #container-1 select {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+:is(.in-animation, .skip-animation) #container-1 .gobutton {
+	width: 100% !important;
+	max-width: var(--loop-ui-panel-width);
+}
+
+:is(.in-animation, .skip-animation) #container-1 .section {
+	display: block;
+	max-width: var(--loop-ui-panel-width);
+	margin: 1.25rem auto 0;
+	padding-top: 1rem;
+	border-top: 1px solid var(--loop-ui-border);
+	text-align: center;
+}
+
+:is(.in-animation, .skip-animation) .cameraTip,
+:is(.in-animation, .skip-animation) .startupWarning {
+	border-left: 0;
+	border: 1px solid var(--loop-ui-border);
+	background: rgb(255 255 255 / 0.04);
+	box-shadow: none;
+}
+
+:is(.in-animation, .skip-animation) .info-box {
+	font-size: 0.875rem;
+	color: var(--loop-ui-muted);
+}
+
+:is(.in-animation, .skip-animation) .info-box h3 {
+	margin: 0 0 0.5rem;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: var(--loop-ui-text);
+}
+
+:is(.in-animation, .skip-animation) .info-box ul {
+	margin: 0;
+	padding-left: 1.15rem;
+}
+
+:is(.in-animation, .skip-animation) .info-box li {
+	margin-bottom: 0.35rem;
+}
+
+#header:not(:empty) {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.65rem;
+	min-height: 2rem;
+	padding: 0.35rem 0.65rem;
+	font-size: 0.8125rem;
+	line-height: 1.35;
+	background: var(--loop-ui-bg) !important;
+	border-bottom: 1px solid var(--loop-ui-border);
+}
+
+#head3,
+#head3a,
+#head9 {
+	display: inline-flex !important;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
+#copythisurl,
+#copythisurl2 {
+	color: var(--loop-ui-muted) !important;
+	font-size: inherit;
+}
+
+#head3a .grabLinks,
+#reshare,
+#head9 #inviteLinkURL {
+	color: var(--loop-ui-accent) !important;
+	font-weight: 500;
+	font-size: inherit;
+	padding: 0;
+	margin: 0;
+	box-shadow: none !important;
+	background: transparent !important;
+	width: auto !important;
+	flex: 0 1 auto;
+	min-width: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: normal;
+	overflow-wrap: normal;
+	max-width: min(42ch, calc(100vw - 8rem));
+}
+
+#head3a .grabLinks:hover,
+#reshare:hover {
+	filter: brightness(1.08);
+}
+
+#subControlButtons {
+	gap: var(--loop-toolbar-gap, 5px);
+	padding: 4px;
+	border-radius: var(--loop-ui-radius-md);
+	border-color: var(--loop-ui-border);
+	box-shadow: 0 4px 16px rgb(0 0 0 / 0.45);
+}
+
+#subControlButtons > div.float,
+#subControlButtons > div.float.hidden,
+#subControlButtons > div.task,
+#subControlButtons > div.float2 {
+	width: var(--loop-toolbar-cell, 45px);
+	height: var(--loop-toolbar-cell, 45px);
+	min-width: var(--loop-toolbar-cell, 45px);
+	min-height: var(--loop-toolbar-cell, 45px);
+	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:is(.in-animation, .skip-animation) .outer.close,
+	#subControlButtons {
+		transition: none;
+	}
+}
+
+@media only screen and (max-width: 650px) {
+	#mainmenu.row {
+		padding: 1.25rem 0.75rem 2.5rem;
+		gap: 1rem;
+	}
+
+	:is(.in-animation, .skip-animation) > h2 {
+		font-size: 1.15rem;
+		padding: 1rem 2.75rem 0.5rem;
+	}
+}
+
+@media only screen and (max-width: 559px) {
+	#mainmenu.row,
+	#mainmenu.row:has(#container-1.hidden) {
+		grid-template-columns: minmax(0, 1fr);
+		justify-items: center;
+	}
+
+	#mainmenu #container-1,
+	#mainmenu #container-2,
+	#mainmenu #container-3,
+	#mainmenu #container-3a,
+	#mainmenu.row:has(#container-1.hidden) #container-2,
+	#mainmenu.row:has(#container-1.hidden) #container-3,
+	#mainmenu.row:has(#container-1.hidden) #container-3a {
+		grid-column: 1;
+		grid-row: auto;
+		justify-self: stretch;
+		width: min(100%, 280px);
+		max-width: 280px;
+	}
+}
+
+#mainmenu.row:has(#container-1.hidden):has(#container-3a:not(.hidden)) {
+	grid-template-columns: repeat(3, minmax(200px, 240px));
+}
+
+#mainmenu.row:has(#container-1.hidden):has(#container-3a:not(.hidden)) #container-3 {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+#mainmenu.row:has(#container-1.hidden):has(#container-3a:not(.hidden)) #container-3a {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+#mainmenu.row:has(#container-1.hidden):has(#container-3a:not(.hidden)) #container-2 {
+	grid-column: 3;
+	grid-row: 1;
+	justify-self: stretch;
+}
+
+@media (min-width: 960px) {
+	#mainmenu.row:has(#container-1.hidden):has(#container-3a:not(.hidden)) {
+		grid-template-columns: repeat(3, minmax(200px, 240px));
+	}
+}
+
+#alertModal.alertModal,
+.alertModal {
+	background: var(--loop-ui-surface) !important;
+	color: var(--loop-ui-text) !important;
+	border: 1px solid var(--loop-ui-border);
+	border-radius: var(--loop-ui-radius-md);
+	box-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
+	max-width: min(480px, calc(100vw - 2rem));
+	font-weight: 400;
+}
+
+.darktheme #alertModal.alertModal,
+.darktheme .alertModal {
+	background: var(--loop-ui-surface) !important;
+	color: var(--loop-ui-text) !important;
+}
+
+.alertModalInner {
+	padding: 1.25rem 1.5rem 1.35rem !important;
+}
+
+.alertModal .modalClose {
+	color: var(--loop-ui-muted) !important;
+	font-size: 1.5rem;
+	line-height: 1;
+	top: 0.35rem;
+}
+
+.alertModalMessage {
+	display: block;
+	text-align: left;
+	font-size: 0.9375rem;
+	line-height: 1.45;
+}
+
+.loop-permission-modal__title {
+	margin: 0 0 0.65rem;
+	font-size: 1.125rem;
+	font-weight: 600;
+	letter-spacing: -0.02em;
+	color: var(--loop-ui-text);
+}
+
+.loop-permission-modal__lead {
+	margin: 0 0 0.85rem;
+	color: var(--loop-ui-muted);
+}
+
+.loop-permission-modal__steps {
+	margin: 0 0 1rem;
+	padding-left: 1.25rem;
+	color: var(--loop-ui-text);
+}
+
+.loop-permission-modal__steps li {
+	margin-bottom: 0.35rem;
+}
+
+.loop-permission-modal__help {
+	margin: 0;
+	font-size: 0.875rem;
+}
+
+.loop-permission-modal__help a {
+	color: var(--a-dark-link, #9ec7ee);
+}
+
+#modalBackdrop {
+	background: rgb(0 0 0 / 0.65) !important;
+}
+
+.loop-footer-bar {
+	position: fixed;
+	right: 0.75rem;
+	bottom: 0.75rem;
+	z-index: var(--loop-z-dropdown, 10);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15rem;
+	padding: 0.2rem 0.35rem;
+	border-radius: 999px;
+	background: rgb(23 23 23 / 0.88);
+	border: 1px solid var(--loop-ui-border);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.loop-footer-bar:not(:has(> .loop-footer-btn:not(.hidden):not(.permahide))) {
+	display: none !important;
+	pointer-events: none;
+}
+
+#calendarButton.loop-footer-btn:not(.hidden):not(.permahide) {
+	display: inline-flex !important;
+}
+
+.loop-footer-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	cursor: pointer;
+	color: var(--loop-ui-muted);
+	transition: background var(--loop-ui-transition), color var(--loop-ui-transition);
+}
+
+.loop-footer-btn:hover {
+	background: var(--loop-ui-surface-raised);
+	color: var(--loop-ui-text);
+}
+
+.loop-footer-btn:focus-visible {
+	outline: 2px solid var(--loop-ui-accent);
+	outline-offset: 2px;
+}
+
+.loop-footer-btn i.las {
+	font-size: 1.25rem;
+	line-height: 1;
+	color: inherit;
+}
+
+.loop-footer-bar .footer {
+	padding: 0 0.5rem;
+	font-size: 0.75rem;
+}
+
+#popupSelector {
+	color: var(--loop-ui-text);
+}
+
+#popupSelector #videoMenu3 {
+	display: block;
+	width: 100%;
+	max-width: var(--loop-ui-panel-width);
+	box-sizing: border-box;
+}
+
+#popupSelector #videoMenu3 > span.loop-video-source-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 2rem 2rem;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#popupSelector #videoMenu3 > span#videoSettings3 {
+	display: block;
+	width: 100%;
+}
+
+#popupSelector #videoSource3 {
+	flex: none;
+	min-width: 0;
+	width: 100% !important;
+	max-width: 100%;
+	grid-column: 1;
+}
+
+#popupSelector #videoMenu3 > .loop-video-source-row #refreshVideoButton {
+	grid-column: 2;
+}
+
+#popupSelector #videoMenu3 > .loop-video-source-row #gear_webcam3 {
+	grid-column: 3;
+}
+
+#popupSelector .title,
+#popupSelector #videoMenu3 .title,
+#add_camera_inner #videoMenu .title,
+#add_camera_inner #audioMenu .multiselect-trigger .title {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.35rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#popupSelector .multiselect-trigger,
+#add_camera_inner #audioMenu .multiselect-trigger {
+	display: block;
+	width: 100%;
+}
+
+#popupSelector .multiselect-trigger .title,
+#add_camera_inner #audioMenu .multiselect-trigger .title {
+	position: relative;
+	padding-right: 0;
+}
+
+#popupSelector .loop-affordance-dropdown,
+#add_camera_inner #audioMenu .loop-affordance-dropdown {
+	position: static;
+	right: auto;
+	top: auto;
+	transform: none;
+	margin: 0 0 0 auto;
+}
+
+#popupSelector .meter,
+#popupSelector .meter2,
+#add_camera_inner #audioMenu .meter,
+#add_camera_inner #audioMenu .meter2 {
+	position: static;
+	right: auto;
+	top: auto;
+	transform: none;
+}
+
+#popupSelector #gear_webcam3,
+#add_camera_inner #gear_webcam {
+	position: static;
+	float: none;
+}
+
+#popupSelector #refreshVideoButton {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	cursor: pointer;
+}
+
+.loop-header-action,
+#header .loop-header-action {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	padding: 0;
+	border: 0 !important;
+	border-radius: var(--loop-ui-radius-sm);
+	background: transparent !important;
+	box-shadow: none !important;
+	color: var(--loop-ui-muted);
+	cursor: pointer;
+}
+
+.loop-header-action:hover,
+#header .loop-header-action:hover {
+	background: rgb(255 255 255 / 0.08) !important;
+	color: var(--loop-ui-text);
+}
+
+#header .loop-header-action :is(i.las, .loop-icon-svg) {
+	width: 1.15rem;
+	height: 1.15rem;
+	font-size: 0;
+}
+
+#head3a,
+#head9,
+#head4 {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.35rem 0.5rem;
+	min-width: 0;
+}
+
+#head3a .las,
+#head9 .las {
+	color: var(--loop-ui-muted) !important;
+	font-size: 1rem;
+}
+
+#head3a .las:hover,
+#head9 .las:hover {
+	color: var(--loop-ui-text) !important;
+}
+
+#chatModule {
+	background: var(--loop-ui-surface) !important;
+	border: 1px solid var(--loop-ui-border) !important;
+	border-radius: var(--loop-ui-radius-md) !important;
+	color: var(--loop-ui-text);
+	box-shadow: 0 8px 28px rgb(0 0 0 / 0.35);
+	overflow: hidden;
+}
+
+.darktheme #chatModule {
+	background: var(--loop-ui-surface) !important;
+	border-color: var(--loop-ui-border) !important;
+}
+
+.chat-header {
+	padding: 0.55rem 0.75rem;
+	background: var(--loop-ui-surface-raised) !important;
+	border-bottom: 1px solid var(--loop-ui-border);
+	color: var(--loop-ui-text);
+	font-size: 0.875rem;
+	font-weight: 600;
+	gap: 0.5rem;
+}
+
+.chat-header > span:last-child {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.chat-header a,
+.chat-header button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	padding: 0;
+	border: 0;
+	border-radius: var(--loop-ui-radius-sm);
+	background: transparent;
+	color: var(--loop-ui-muted);
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.chat-header a:hover,
+.chat-header button:hover {
+	background: rgb(255 255 255 / 0.06);
+	color: var(--loop-ui-text);
+}
+
+#chatBody {
+	background: var(--loop-ui-bg) !important;
+	color: var(--loop-ui-text);
+	border-color: var(--loop-ui-border) !important;
+	padding: 0.65rem 0.75rem;
+	font-size: 0.875rem;
+	line-height: 1.45;
+}
+
+.chat-input-area {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.55rem 0.65rem;
+	background: var(--loop-ui-surface-raised) !important;
+	border-top: 1px solid var(--loop-ui-border);
+}
+
+#chatInput {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0.45rem 0.65rem;
+	border: 1px solid var(--loop-ui-border);
+	border-radius: var(--loop-ui-radius-sm);
+	background: var(--loop-ui-bg);
+	color: var(--loop-ui-text);
+	font-size: 0.875rem;
+}
+
+#chatInput::placeholder {
+	color: var(--loop-ui-muted);
+}
+
+.chatBarInputButton {
+	width: auto;
+	min-width: 3.25rem;
+	margin: 0;
+	padding: 0.45rem 0.75rem;
+	border: 1px solid var(--loop-ui-accent);
+	border-radius: var(--loop-ui-radius-sm);
+	background: var(--loop-ui-accent) !important;
+	color: #111 !important;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.chat-input-area > button:last-child {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	border: 1px solid var(--loop-ui-border);
+	border-radius: var(--loop-ui-radius-sm);
+	background: var(--loop-ui-bg);
+	color: var(--loop-ui-muted);
+}
+
+.chat-input-area > button:last-child:hover {
+	color: var(--loop-ui-text);
+	background: var(--loop-ui-surface);
+}
+
+#chatModule .resizer {
+	background: var(--loop-ui-surface-raised);
+}
+
+#chatModule .inMessage,
+#chatModule .outMessage,
+#chatModule .tipMessage {
+	margin-bottom: 0.5rem;
+	padding: 0.45rem 0.65rem;
+	border-radius: var(--loop-ui-radius-sm);
+	font-size: 0.875rem;
+	line-height: 1.4;
+	border: 0;
+}
+
+#chatModule .inMessage {
+	background: var(--loop-ui-surface-raised);
+	color: var(--loop-ui-text);
+	text-align: left;
+}
+
+#chatModule .outMessage {
+	background: color-mix(in oklab, var(--loop-ui-accent) 22%, var(--loop-ui-surface-raised));
+	color: var(--loop-ui-text);
+	text-align: right;
+}
+
+#chatModule .tipMessage {
+	background: color-mix(in oklab, var(--loop-ui-accent) 35%, #2a2a2a);
+	color: var(--loop-ui-text);
+	text-align: center;
+	font-weight: 500;
+}
+
+.chat-header button,
+.chat-header a {
+	user-select: none;
+}
+
+.gobutton,
+.darktheme .gobutton,
+button.gobutton,
+input.gobutton {
+	background-color: var(--loop-ui-accent) !important;
+	border-color: var(--loop-ui-accent) !important;
+	color: var(--loop-accent-ink, #111) !important;
+}
+
+.gobutton:hover,
+.darktheme .gobutton:hover {
+	background-color: var(--loop-accent-hover, #72cc58) !important;
+	border-color: var(--loop-accent-hover, #72cc58) !important;
+}
+
+.gobutton:active,
+.darktheme .gobutton:active {
+	background-color: var(--loop-accent-active, #58a843) !important;
+	border-color: var(--loop-accent-active, #58a843) !important;
+}
+
+.darktheme .gobutton {
+	color: var(--loop-accent-ink, #111) !important;
+}
+
+:is(.in-animation, .skip-animation) button.white,
+:is(.in-animation, .skip-animation) .gobutton.gowebcam {
+	background-color: var(--loop-ui-accent) !important;
+	border-color: var(--loop-ui-accent) !important;
+	color: var(--loop-accent-ink, #111) !important;
+}
+
+#subControlButtons {
+	background-color: var(--loop-ui-surface) !important;
+	border: 1px solid var(--loop-ui-border) !important;
+	box-shadow: 0 4px 16px rgb(0 0 0 / 0.45) !important;
+}
+
+#subControlButtons > div.float,
+#subControlButtons > div.float.hidden,
+#subControlButtons > div.task,
+#subControlButtons > div.float2 {
+	background-color: var(--loop-ui-surface-raised) !important;
+	box-shadow: none !important;
+	border: 1px solid var(--loop-ui-border);
+}
+
+#subControlButtons > div.float:hover,
+#subControlButtons > div.float.hidden:hover,
+#subControlButtons > div.task:hover,
+#subControlButtons > div.float2:hover {
+	background-color: color-mix(in oklab, var(--loop-ui-accent) 12%, var(--loop-ui-surface-raised)) !important;
+}
+
+:is(.in-animation, .skip-animation) #videoMenu .title,
+:is(.in-animation, .skip-animation) #videoMenu2 .title {
+	display: flex !important;
+}
+
+#closeChat,
+#popOutChat {
+	background: transparent !important;
+	border: 1px solid var(--loop-ui-border) !important;
+	color: var(--loop-ui-muted) !important;
+	border-radius: var(--loop-ui-radius-sm) !important;
+}
+
+#closeChat:hover,
+#popOutChat:hover {
+	color: var(--loop-ui-text) !important;
+	border-color: var(--loop-ui-accent) !important;
+}
+
+#subControlButtons :is(.loop-icon-upgraded, .toggleSize.las) {
+	font-size: 0 !important;
+}

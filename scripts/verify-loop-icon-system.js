@@ -9,13 +9,16 @@ const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const map = JSON.parse(fs.readFileSync(path.join(__dirname, "loop-icon-line-map.json"), "utf8"));
 
 const requiredFiles = [
+	"loop-tokens.css",
+	"loop-ui.css",
 	"loop-icons.css",
 	"loop-icons.js",
 	"loop-icon-glyphs.js",
 	"loop-icon-line-map.js",
 	"docs/LOOP_ICONS.md",
 	"scripts/loop-icon-line-map.json",
-	"scripts/build-loop-icon-glyphs.js"
+	"scripts/build-loop-icon-glyphs.js",
+	"scripts/dev-server.py"
 ];
 
 function assert(condition, message) {
@@ -99,6 +102,35 @@ assert(indexHtml.includes("loop-icons.css"), "index.html must link loop-icons.cs
 assert(indexHtml.includes("loop-icon-glyphs.js"), "index.html must load loop-icon-glyphs.js");
 assert(indexHtml.includes("loop-icon-line-map.js"), "index.html must load loop-icon-line-map.js");
 assert(indexHtml.includes("loop-icons.js"), "index.html must load loop-icons.js");
+
+const uiHtmlPages = ["index.html", "room.html"];
+uiHtmlPages.forEach(page => {
+	const source = fs.readFileSync(path.join(root, page), "utf8");
+	assert(source.includes("loop-tokens.css"), `${page} must link loop-tokens.css`);
+	assert(source.includes("loop-ui.css"), `${page} must link loop-ui.css`);
+});
+
+function loopUiVersionsFromHtml(source) {
+	const tokensMatch = source.match(/loop-tokens\.css\?ver=(\d+)/);
+	const uiMatch = source.match(/loop-ui\.css\?ver=(\d+)/);
+	return {
+		tokens: tokensMatch ? tokensMatch[1] : null,
+		ui: uiMatch ? uiMatch[1] : null
+	};
+}
+
+const uiVersionSets = uiHtmlPages.map(page => {
+	const source = fs.readFileSync(path.join(root, page), "utf8");
+	const versions = loopUiVersionsFromHtml(source);
+	assert(versions.tokens && versions.ui, `${page} must link loop-tokens.css and loop-ui.css with ?ver=`);
+	return { page, ...versions };
+});
+
+const tokenVersions = new Set(uiVersionSets.map(entry => entry.tokens));
+const uiVersions = new Set(uiVersionSets.map(entry => entry.ui));
+assert(tokenVersions.size === 1, `loop-tokens.css cache versions must match: ${JSON.stringify(uiVersionSets)}`);
+assert(uiVersions.size === 1, `loop-ui.css cache versions must match: ${JSON.stringify(uiVersionSets)}`);
+console.log(`loop-ui cache version: tokens=${[...tokenVersions][0]} ui=${[...uiVersions][0]} (${uiHtmlPages.length} pages)`);
 
 const glyphsSource = fs.readFileSync(path.join(root, "loop-icon-glyphs.js"), "utf8");
 assert(glyphsSource.includes("LoopIconOptical"), "loop-icon-glyphs.js must export LoopIconOptical");
