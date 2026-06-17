@@ -32,26 +32,29 @@ for (const page of ["index.html", "room.html"]) {
 	);
 }
 
-// U6: advanced Create-a-Room controls collapse behind a disclosure on index.html.
-const indexHtml = read("index.html");
-check(
-	/<tbody id="roomAdvanced"[^>]*\shidden\b/.test(indexHtml),
-	'index.html: <tbody id="roomAdvanced"> must carry the hidden attribute (U6 disclosure default-collapsed)'
-);
-const toggleMatches = indexHtml.match(/class="loop-disclosure-toggle"/g) || [];
-check(
-	toggleMatches.length === 1,
-	`index.html: expected exactly one .loop-disclosure-toggle, found ${toggleMatches.length}`
-);
-const toggleTag = (indexHtml.match(/<button[^>]*class="loop-disclosure-toggle"[^>]*>/) || [])[0] || "";
-check(
-	/aria-controls="roomAdvanced"/.test(toggleTag),
-	'index.html: .loop-disclosure-toggle must set aria-controls="roomAdvanced"'
-);
-check(
-	/aria-expanded="false"/.test(toggleTag),
-	'index.html: .loop-disclosure-toggle must default aria-expanded="false"'
-);
+// U6: advanced Create-a-Room controls collapse behind a disclosure on both the
+// landing (index.html) and the room form (room.html).
+for (const page of ["index.html", "room.html"]) {
+	const src = read(page);
+	check(
+		/<tbody id="roomAdvanced"[^>]*\shidden\b/.test(src),
+		`${page}: <tbody id="roomAdvanced"> must carry the hidden attribute (U6 disclosure default-collapsed)`
+	);
+	const toggleMatches = src.match(/class="loop-disclosure-toggle"/g) || [];
+	check(
+		toggleMatches.length === 1,
+		`${page}: expected exactly one .loop-disclosure-toggle, found ${toggleMatches.length}`
+	);
+	const toggleTag = (src.match(/<button[^>]*class="loop-disclosure-toggle"[^>]*>/) || [])[0] || "";
+	check(
+		/aria-controls="roomAdvanced"/.test(toggleTag),
+		`${page}: .loop-disclosure-toggle must set aria-controls="roomAdvanced"`
+	);
+	check(
+		/aria-expanded="false"/.test(toggleTag),
+		`${page}: .loop-disclosure-toggle must default aria-expanded="false"`
+	);
+}
 check(
 	read("loop-ui.css").includes(".loop-disclosure-toggle {"),
 	'loop-ui.css: must define the .loop-disclosure-toggle rule (U6 styling)'
