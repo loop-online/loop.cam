@@ -59,6 +59,7 @@
 		<meta name="msapplication-TileColor" content="#da532c" />
 		<meta name="theme-color" content="#0f131d" />
 		<link rel="stylesheet" href="./main.css?ver=368" />
+		<link rel="stylesheet" href="./loop-icons.css?ver=10" />
 		<script type="text/javascript" crossorigin="anonymous" src="./thirdparty/adapter.js"></script>
 		<style id="lightbox-animations" type="text/css"></style>
 		
@@ -218,8 +219,11 @@
                             <div id="speakerVolumeValue" class="speaker-volume-value">100%</div>
                         </div>
                     </div>
-                    <div id="mutebutton" onmousedown="toggleMute(false, event);event.preventDefault(); event.stopPropagation();" data-translate="mute-the-mic" title="Mute the Mic (CTRL/⌘ + M)" alt="Mute the Mic" aria-label="Mute Microphone" ontouchstart="toggleMute(false, event);event.preventDefault(); event.stopPropagation();" tabindex="2" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);"  class="hidden float" style="cursor: pointer;">
-                        <i id="mutetoggle" class="toggleSize las la-microphone" style="position: relative; top: 0.5px;"></i>
+                    <div id="mutebutton" onmousedown="toggleMute(false, event);event.preventDefault(); event.stopPropagation();" title="Mute the Mic (CTRL/⌘ + M)" alt="Mute the Mic" aria-label="Mute Microphone" ontouchstart="toggleMute(false, event);event.preventDefault(); event.stopPropagation();" tabindex="2" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);"  class="hidden float" style="cursor: pointer;">
+                        <span class="toolbar-toggle">
+                            <span class="mic-meter" aria-hidden="true"></span>
+                            <i id="mutetoggle" class="toggleSize las la-microphone" aria-hidden="true"></i>
+                        </span>
                     </div>
                     <div id="mutevideobutton" onmousedown="event.preventDefault(); event.stopPropagation();" data-translate="disable-the-camera" title="Disable the Camera (CTRL/⌘ + B)" alt="Disable the Camera" aria-label="Mute Camera" onclick="toggleVideoMute()"   tabindex="2" role="button" aria-pressed="false" onkeyup="enterPressedClick(event,this);"  class="hidden float" style="cursor: pointer;">
                         <i id="mutevideotoggle" onmousedown="event.preventDefault(); event.stopPropagation();"  class="toggleSize las la-video"></i>
@@ -499,8 +503,8 @@
                         </div>
 						<span style="display:inline-block;padding-top: 5px;">
 							<select id="videoSourceSelect" tabindex="1" title="Video source list"></select>
-							<span id="gear_webcam" onclick="toggle(document.getElementById('videoSettings'));">
-								<i class="las la-cog" style="font-size: 140%; vertical-align: middle;" aria-hidden="true"></i>
+							<span id="gear_webcam" class="loop-settings-gear" onclick="toggle(document.getElementById('videoSettings'));">
+								<i class="las la-cog" aria-hidden="true"></i>
 							</span>
 						</span>
 						<div id="cameraTip1" class="cameraTip hidden">
@@ -537,7 +541,7 @@
 						<a id="multiselect-trigger" class="form-control multiselect-trigger" >
 							<div  class="title">
 								<i class="las la-microphone-alt"></i><span data-translate="select-audio-source"> Audio Source(s) </span>
-								<i id='chevarrow1' class="chevron bottom" aria-hidden="true"></i>
+								<i id="chevarrow1" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 								<div class="meter" id="meter1"></div><div class="meter2" id="meter2"></div>
 							</div>
 						</a>
@@ -1580,8 +1584,8 @@
 						<span data-translate="add-to-scene">add to scene 1</span>
 					</button>
                 </div>
-				<button class="hideDropMenu advanced" onclick="toggleByDataset('1');getById('chevarrow3').classList.toggle('bottom');getById('chevarrow3').classList.toggle('right');">
-					<i id="chevarrow3" class="chevron right" aria-hidden="true"></i>
+				<button class="hideDropMenu advanced" onclick="toggleByDataset('1');loopToggleAccordionChevron('chevarrow3');">
+					<i id="chevarrow3" class="chevron right las la-chevron-right loop-affordance-expand" aria-hidden="true"></i>
 					<span data-translate="scene-options">Scene options</span>
 				</button>
 				<div class="group hidden" data-cluster="1">
@@ -1640,8 +1644,8 @@
                     </div>
                 </div>
 				
-				<button class="hideDropMenu advanced" onclick="toggleByDataset('2');getById('chevarrow4').classList.toggle('bottom');getById('chevarrow4').classList.toggle('right');">
-					<i id="chevarrow4" class="chevron right" aria-hidden="true"  ></i>
+				<button class="hideDropMenu advanced" onclick="toggleByDataset('2');loopToggleAccordionChevron('chevarrow4');">
+					<i id="chevarrow4" class="chevron right las la-chevron-right loop-affordance-expand" aria-hidden="true"></i>
 					<span data-translate="additional-controls">Additional Controls</span>
 				</button>
 				<div class="group hidden" data-cluster="2">
@@ -1851,8 +1855,8 @@
 						<span id="refreshVideoButton" title="Activate or Reload this video device.">
 							<i class="las la-sync-alt"></i>
 						</span>
-						<span id="gear_webcam3" style="display: none; cursor:pointer;" onclick="toggleQualityGear3();">
-							<i class="las la-cog" style="font-size: 135%; top:1px; vertical-align: middle;" aria-hidden="true"></i>
+						<span id="gear_webcam3" class="loop-settings-gear" style="display: none; cursor:pointer;" onclick="toggleQualityGear3();">
+							<i class="las la-cog" aria-hidden="true"></i>
 						</span>
 					</span>
 					<span id="videoSettings3" style="display: none;">
@@ -1885,7 +1889,7 @@
 					<a id="multiselect-trigger3" class="form-control multiselect-trigger" >
 						<div id="title" class="title">
 							<i class="las la-microphone-alt"></i><span data-translate="select-audio-source"> Audio Source(s) </span>
-							<i id="chevarrow2" class="chevron bottom" aria-hidden="true"></i>
+							<i id="chevarrow2" class="chevron bottom las la-chevron-down loop-affordance-dropdown" aria-hidden="true"></i>
 							<div class="meter" id="meter3"></div><div class="meter2" id="meter4"></div>
 						</div>
 					</a>
@@ -1963,7 +1967,7 @@
                     <a onclick="copyFunction(this,event)" data-drag="1" draggable="true" id="grabDirectorSoloLink" data-menu="context-menu" class="task" ></a>
                 </div>
 				<br />
-				<button onclick="toggleSettings()" class="toggleSettings"><i class="las la-chevron-right"></i><b><span data-translate="close-settings">Close Settings</span></b></button>
+				<button onclick="toggleSettings()" class="toggleSettings"><i class="las la-times loop-affordance-close" aria-hidden="true"></i><b><span data-translate="close-settings">Close Settings</span></b></button>
 				
 				<button id='advancedOptionsAudio' onclick="toggleAudioUser(this);" class="advancedToggle">
 				<i class="las la-sliders-h" style="position:relative;"></i> <b>Audio</b></button>
@@ -2742,11 +2746,14 @@
 			////////////// ---- end of custom landing page
 			
 		</script>
-		<script type="text/javascript" crossorigin="anonymous" id="lib-js" src="./lib.js?ver=1359"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-glyphs.js?ver=3"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icon-line-map.js?ver=3"></script>
+		<script type="text/javascript" crossorigin="anonymous" src="./loop-icons.js?ver=10"></script>
+		<script type="text/javascript" crossorigin="anonymous" id="lib-js" src="./lib.js?ver=1417"></script>
 		<!-- 
 		// If you wish to change branding, blank offers a good clean start.
 		<script type="text/javascript" id="main-js" src="./main.js" data-translation="blank"></script>
 		-->
-		<script type="text/javascript" crossorigin="anonymous" id="main-js" src="./main.js?ver=767"></script>
+		<script type="text/javascript" crossorigin="anonymous" id="main-js" src="./main.js?ver=1065"></script>
 	</body>
 </html>

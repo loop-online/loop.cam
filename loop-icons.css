@@ -1,0 +1,301 @@
+/* Loop Cam icon system — Lucide SVG rendered into upstream Line Awesome hooks. */
+
+:root {
+	--loop-icon-size-sm: 1em;
+	--loop-icon-size-md: 1.25em;
+	--loop-icon-size-lg: 2rem;
+	--loop-icon-size-toggle: 28px;
+	--loop-home-icon-size: 80px;
+	--loop-home-icon-top: 65%;
+	--loop-icon-muted: var(--muted-icon, #c8ccd4);
+	--loop-icon-on-surface: var(--discord-text, #e8eaed);
+	--loop-toolbar-cell: 45px;
+	--loop-toolbar-gap: 5px;
+	--mic-meter-color: #64c04d;
+}
+
+/* Shared upgraded / SVG host */
+:is(i.las.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg), .loop-home-card-icon) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	line-height: 1;
+	font-size: 0;
+	font-style: normal;
+	color: inherit;
+}
+
+i.las.loop-icon-upgraded::before,
+i.lab.loop-icon-upgraded::before,
+i.lar.loop-icon-upgraded::before,
+i.las:has(> svg.loop-icon-svg)::before,
+i.lab:has(> svg.loop-icon-svg)::before,
+i.lar:has(> svg.loop-icon-svg)::before {
+	content: none !important;
+	display: none !important;
+}
+
+/* Hide legacy CSS chevron triangles when Line Awesome chevrons are present */
+i.las.chevron::before {
+	display: none !important;
+	content: none !important;
+	border: none !important;
+}
+
+.loop-icon-svg {
+	width: 1em;
+	height: 1em;
+	display: block;
+	overflow: visible;
+}
+
+/* Control bar toggles */
+:is(.toggleSize.loop-icon-upgraded, .toggleSize.las:has(> svg.loop-icon-svg), .toggleSize.las) {
+	width: var(--loop-icon-size-toggle);
+	height: var(--loop-icon-size-toggle);
+	overflow: visible;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	line-height: 1;
+}
+
+:is(.toggleSize.loop-icon-upgraded, .toggleSize.las:has(> svg.loop-icon-svg)) .loop-icon-svg {
+	width: var(--loop-icon-size-toggle);
+	height: var(--loop-icon-size-toggle);
+}
+
+#subControlButtons > div.float,
+#subControlButtons > div.float.hidden,
+#subControlButtons > div.task {
+	overflow: visible;
+}
+
+#subControlButtons > div.float > .toggleSize,
+#subControlButtons > div.float.hidden > .toggleSize,
+#subControlButtons > div.task > .toggleSize {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+:is(.float, #subControlButtons > .float, #subControlButtons > .float.hidden, #subControlButtons > .task)
+	> :is(.loop-icon-upgraded, .toggleSize.las:has(> svg.loop-icon-svg), .toggleSize.las) {
+	pointer-events: none;
+}
+
+#subControlButtons .toggleSize,
+#subControlButtons .toggleSize .loop-icon-svg {
+	color: var(--loop-icon-on-surface, #fff);
+}
+
+.toolbar-toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--loop-icon-size-toggle);
+	height: var(--loop-icon-size-toggle);
+	flex-shrink: 0;
+}
+
+#subControlButtons #mutetoggle {
+	position: relative;
+	z-index: 1;
+}
+
+.mic-meter {
+	position: absolute;
+	inset: -2px;
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 0;
+	opacity: calc(var(--mic-level, 0) / 255);
+	background: radial-gradient(circle at 50% 55%, var(--mic-meter-color) 0%, transparent 70%);
+	transform: scale(calc(0.85 + (var(--mic-level, 0) / 255) * 0.25));
+	transition: opacity 80ms linear, transform 80ms linear;
+}
+
+#mutebutton.red .mic-meter {
+	opacity: 0;
+}
+
+/* Inline content spacing */
+h2 :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
+h3 :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
+.guest-tip-item :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
+label > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)):first-child {
+	margin-inline-end: 0.35em;
+	vertical-align: -0.12em;
+}
+
+.guest-tip-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5em;
+}
+
+.guest-tip-item :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)) {
+	flex-shrink: 0;
+	margin-top: 0.15em;
+}
+
+.director-link-icons:is(i.las, .loop-icon-upgraded) {
+	color: #5b6574;
+}
+
+.darktheme .director-link-icons:is(i.las, .loop-icon-upgraded) {
+	color: var(--muted-icon, #c8ccd4);
+}
+
+.director-link-icons:is(i.las, .loop-icon-upgraded):hover {
+	color: var(--a-hover);
+}
+
+.darktheme .director-link-icons:is(i.las, .loop-icon-upgraded):hover {
+	color: var(--a-dark-hover);
+}
+
+/* Affordance hooks */
+.loop-affordance-close,
+.loop-affordance-expand,
+.loop-affordance-dropdown,
+.loop-settings-gear {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--loop-icon-size-md);
+	height: var(--loop-icon-size-md);
+	font-size: var(--loop-icon-size-md) !important;
+	vertical-align: middle;
+	flex-shrink: 0;
+	cursor: pointer;
+}
+
+.loop-affordance-close .loop-icon-svg,
+.loop-affordance-expand .loop-icon-svg,
+.loop-affordance-dropdown .loop-icon-svg,
+.loop-settings-gear .loop-icon-svg {
+	width: var(--loop-icon-size-md);
+	height: var(--loop-icon-size-md);
+}
+
+button.toggleSettings .loop-affordance-close {
+	margin-inline-end: 0.35em;
+}
+
+/* Dropdown chevrons: lib.js toggles .bottom (collapsed = down, open = up) */
+i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
+	transform: rotate(180deg);
+}
+
+.multiselect-trigger .loop-affordance-dropdown {
+	margin-inline-start: auto;
+}
+
+/* Settings / camera / popup surfaces */
+#gear_webcam i.las,
+#gear_webcam3 i.las,
+#refreshVideoButton i.las,
+#add_camera_inner .title > i.las,
+#popupSelector .title > i.las,
+#add_camera_inner .cameraTip > i.las,
+#add_camera_inner .startupWarning > i.las {
+	width: var(--loop-icon-size-md);
+	height: var(--loop-icon-size-md);
+	font-size: var(--loop-icon-size-md) !important;
+}
+
+#shareScreenGear i.las,
+#popupSelector_constraints_loading i.las {
+	width: var(--loop-icon-size-lg);
+	height: var(--loop-icon-size-lg);
+	font-size: var(--loop-icon-size-lg) !important;
+}
+
+#refreshVideoButton > i.las {
+	position: relative;
+	top: 3px;
+}
+
+#add_camera_inner .title > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)),
+#popupSelector .title > :is(.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)) {
+	margin-inline-end: 0.35em;
+	vertical-align: -0.12em;
+}
+
+/* Home cards — Lucide only (legacy background-image removed from main.css) */
+#container-1.column:not(.in-animation):not(.skip-animation),
+#container-2.column:not(.in-animation):not(.skip-animation),
+#container-3.column:not(.in-animation):not(.skip-animation),
+#container-3a.column:not(.in-animation):not(.skip-animation) {
+	position: relative;
+	background-image: none !important;
+}
+
+.loop-home-card-icon {
+	position: absolute;
+	left: 50%;
+	top: var(--loop-home-icon-top);
+	transform: translate(-50%, -50%);
+	width: var(--loop-home-icon-size);
+	height: var(--loop-home-icon-size);
+	pointer-events: none;
+	opacity: 0.9;
+	color: var(--loop-icon-on-surface);
+	overflow: visible;
+}
+
+#container-2 .loop-home-card-icon {
+	--loop-home-icon-top: 67%;
+}
+
+.loop-home-card-icon .loop-icon-svg {
+	width: var(--loop-home-icon-size);
+	height: var(--loop-home-icon-size);
+	overflow: visible;
+}
+
+#container-1:is(.in-animation, .skip-animation) .loop-home-card-icon,
+#container-2:is(.in-animation, .skip-animation) .loop-home-card-icon,
+#container-3:is(.in-animation, .skip-animation) .loop-home-card-icon,
+#container-3a:is(.in-animation, .skip-animation) .loop-home-card-icon {
+	display: none;
+}
+
+@media only screen and (max-width: 500px), only screen and (max-height: 500px) {
+	:root {
+		--loop-icon-size-toggle: 24px;
+		--loop-toolbar-cell: 40px;
+	}
+}
+
+@media only screen and (max-width: 410px), only screen and (max-height: 410px) {
+	:root {
+		--loop-icon-size-toggle: 22px;
+		--loop-toolbar-cell: 38px;
+	}
+}
+
+@media only screen and (max-width: 360px), only screen and (max-height: 360px) {
+	:root {
+		--loop-icon-size-toggle: 20px;
+		--loop-toolbar-cell: 35px;
+	}
+}
+
+@media only screen and (max-width: 320px) {
+	:root {
+		--loop-icon-size-toggle: 18px;
+		--loop-toolbar-cell: 32px;
+	}
+}
+
+@media only screen and (max-width: 280px) {
+	:root {
+		--loop-icon-size-toggle: 16px;
+		--loop-toolbar-cell: 30px;
+	}
+}

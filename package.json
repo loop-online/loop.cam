@@ -1,0 +1,30 @@
+{
+  "name": "loop.cam",
+  "version": "1.0.0",
+  "description": "Loop Cam is Loop's branded production-source tool for bringing remote cameras, microphones, and screen shares into OBS or other studio software.",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "build:icons": "node scripts/build-loop-icon-glyphs.js",
+    "verify:icons": "node scripts/extract-line-icon-usage.js && node scripts/verify-loop-icon-system.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loop-online/loop.cam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/loop-online/loop.cam/issues"
+  },
+  "homepage": "https://github.com/loop-online/loop.cam#readme",
+  "devDependencies": {
+    "lucide": "^0.525.0"
+  }
+}

@@ -495,7 +495,7 @@ async function main() {
 			}
 			// Only show menu if not in auth mode
 			if (!urlParams.has("auth") && !urlParams.has("requireauth")) {
-				//getById("mainmenu").style.opacity = 1;
+				getById("mainmenu").style.opacity = 1;
 			}
 		} catch (error) {
 			errorlog(error);
@@ -569,7 +569,7 @@ async function main() {
 			if (location.hostname === "china.vdo.ninja") {
 				session.wss = "wss://china.rtc.ninja:8443";
 			}
-			//getById("mainmenu").style.opacity = 1;
+			getById("mainmenu").style.opacity = 1;
 
 			getById("qos").innerHTML = '<i class="las la-plug"></i>';
 			getById("logoname").innerHTML = getById("qos").outerHTML;

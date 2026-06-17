@@ -6,7 +6,7 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const expectedBefore = ["container-1", "container-2", "container-3"];
-const expectedAfter = ["container-1", "container-2", "container-3", "container-5", "container-7"];
+const expectedAfter = ["container-1", "container-2", "container-3"];
 const advancedCards = ["container-15", "container-16", "container-17", "container-20"];
 
 const mimeTypes = {
@@ -107,7 +107,7 @@ async function main() {
 		page.on("pageerror", error => errors.push(error.message));
 
 		await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
-		await page.waitForSelector("#dropButton", { timeout: 30000 });
+		await page.waitForSelector("#container-1", { timeout: 30000 });
 
 		const visibleCards = () =>
 			page.$$eval("div.column.card", elements =>
@@ -119,14 +119,11 @@ async function main() {
 			);
 
 			const before = await visibleCards();
-			const dropButton = await page.$eval("#dropButton", element => ({
-				ariaHidden: element.getAttribute("aria-hidden"),
-				ariaLabel: element.getAttribute("aria-label") || "",
-				role: element.getAttribute("role") || ""
-			}));
 			const createRoomHeading = await page.$eval("#container-1 [data-translate='add-group-chat']", element => element.textContent.replace(/\s+/g, " ").trim());
-			await page.click("#dropButton");
-			const after = await visibleCards();
+			const dropButtonDisplay = await page.$eval("#dropButton", element => getComputedStyle(element).display);
+			const infoDisplay = await page.$eval("#info", element => getComputedStyle(element).display);
+			const creditsDisplay = await page.$eval("#credits", element => getComputedStyle(element).display);
+			const after = before;
 			const advanced = await page.$$eval("#container-15, #container-16, #container-17, #container-20", elements =>
 				elements.map(element => ({
 					id: element.id,
@@ -143,11 +140,13 @@ async function main() {
 			assertEqual("default visible cards", before, expectedBefore);
 			assertEqual("post-more-options visible cards", after, expectedAfter);
 			assertEqual("create room heading", createRoomHeading, "Create a Room");
-			assertEqual("drop button role", dropButton.role, "button");
-			assertEqual("drop button aria-label", dropButton.ariaLabel, "More options");
-			if (dropButton.ariaHidden === "true") {
-				throw new Error("drop button should not be aria-hidden");
-			}
+			assertEqual("drop button hidden", dropButtonDisplay, "none");
+			assertEqual("info section hidden", infoDisplay, "none");
+			assertEqual("credits footer hidden", creditsDisplay, "none");
+			assertExcludes("initial home surface", initialSurfaceText, "What is Loop Cam?");
+			assertExcludes("initial home surface", initialSurfaceText, "VDO.Ninja");
+			assertExcludes("initial home surface", initialSurfaceText, "Stream Media File");
+			assertExcludes("initial home surface", initialSurfaceText, "Run a Speed Test");
 			assertExcludes("initial home surface", initialSurfaceText, "params.vdo.ninja");
 			assertExcludes("room tips text", roomNotes.text, "Advanced URL parameters");
 			assertExcludes("room tips links", roomNotes.links.join(" "), "params.vdo.ninja");
@@ -162,7 +161,7 @@ async function main() {
 
 		console.log("Loop home surface verified.");
 		console.log(`Visible before More Options: ${before.join(", ")}`);
-		console.log(`Visible after More Options: ${after.join(", ")}`);
+		console.log(`Visible on home surface: ${after.join(", ")}`);
 		console.log(`Advanced cards hidden: ${advancedCards.join(", ")}`);
 	} finally {
 		if (browser) {

@@ -76,8 +76,20 @@ Brand the public surface instead:
 - Visible copy in the default Loop path.
 - CSS theme and Loop-specific visual overrides.
 - Default settings and visible help links.
+- Icon normalization via `loop-icons.css`, `loop-icons.js`, and `docs/LOOP_ICONS.md` (keep upstream `las la-*` class names).
 
-## Cleanup Rules
+## Icon System
+
+Loop Cam **renders Lucide icons** (ISC) while keeping upstream **Line Awesome class names** (`las la-*`) for mergeability.
+
+- **Map** — `scripts/loop-icon-line-map.json` (+ generated `loop-icon-line-map.js`)
+- **Glyphs** — `loop-icon-glyphs.js` (generated from Lucide; run `npm run build:icons`)
+- **Runtime** — `loop-icons.js` upgrades `<i class="las la-*">` to inline Lucide SVG; `loop-icons.css` normalizes size/contrast
+- **Adding icons** — Map new `la-*` token → Lucide name, rebuild glyphs, run `node scripts/verify-loop-icon-system.js`
+- **Docs** — `docs/LOOP_ICONS.md`
+
+Line Awesome font files remain in the repo for legacy/unwired pages; promoted surfaces do not depend on the icon font once upgraded.
+
 
 Good cleanup reduces maintenance cost or user confusion:
 
@@ -128,7 +140,7 @@ The drift audit is working-tree aware. It separates high-risk runtime overlap, u
 `main.js` and `lib.js` should also stay latest-upstream-first. Current Loop deltas are intentionally small:
 
 - `main.js`: custom-domain title fallback should use Loop metadata, and iframe `function` messages should return before falling through to generic action handling.
-- `lib.js`: `dropDownButtonAction` should reveal only `loopVisibleHomeCards`, not every hidden VDO.Ninja home card. Keep upstream card IDs intact; the current curated reveal is media-file streaming plus upstream's speed-test card.
+- `lib.js`: `dropDownButtonAction` should reveal only `loopVisibleHomeCards`, not every hidden VDO.Ninja home card. Keep upstream card IDs intact. The default Loop home surface keeps `loopVisibleHomeCards` empty and hides `#dropButton` and `#info` via the Loop CSS override block.
 
 If these files grow larger Loop deltas, treat that as drift to justify or remove.
 

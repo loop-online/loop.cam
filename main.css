@@ -1636,7 +1636,11 @@ button.glyphicon-button.active.focus {
 	display: none;
 }
 
-#subControlButtons div, #subControlButtons span button {
+#subControlButtons > div.float,
+#subControlButtons > div.float.hidden,
+#subControlButtons > div.task,
+#subControlButtons > div.float2,
+#subControlButtons > span button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1647,7 +1651,10 @@ button.glyphicon-button.active.focus {
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.75);
 }
 
-#subControlButtons div:hover {
+#subControlButtons > div.float:hover,
+#subControlButtons > div.float.hidden:hover,
+#subControlButtons > div.task:hover,
+#subControlButtons > div.float2:hover {
 	background-color: var(--discord-grey-3);
 	border-radius: 4px;
 }
@@ -2332,7 +2339,7 @@ div#chatBody a {
 		min-height: 40px;
 		margin: 4px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 28px;
 	}
 	#hangupbutton {
@@ -2347,7 +2354,7 @@ div#chatBody a {
 		min-height: 40px;
 		margin: 4px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 28px;
 	}
 	#chatModule{
@@ -2362,7 +2369,7 @@ div#chatBody a {
 		border-radius: 6px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 26px;
 	}
 	#hangupbutton {
@@ -2377,7 +2384,7 @@ div#chatBody a {
 		border-radius: 6px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 26px;
 	}
 	#chatModule{
@@ -2393,7 +2400,7 @@ div#chatBody a {
 		border-radius: 4px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 20px;
 	}
 	#hangupbutton {
@@ -2408,7 +2415,7 @@ div#chatBody a {
 		border-radius: 4px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 20px;
 	}
 	#chatModule {
@@ -2423,7 +2430,7 @@ div#chatBody a {
 		border-radius: 4px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 18px;
 	}
 }
@@ -2435,7 +2442,7 @@ div#chatBody a {
 		border-radius: 4px;
 		margin: 3px;
 	}
-	#SubControlButtons > div i {
+	#subControlButtons > div i {
 		font-size: 16px;
 	}
 }
@@ -2728,10 +2735,6 @@ label {
 .outer:hover .inner:after {
 	top: 85%;
 }
-.microphoneBackground{
-	background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 13 4 C 11.90625 4 11 4.90625 11 6 L 11 18 C 11 19.09375 11.90625 20 13 20 L 19 20 C 20.09375 20 21 19.09375 21 18 L 21 6 C 21 4.90625 20.09375 4 19 4 Z M 13 6 L 19 6 L 19 18 L 13 18 Z M 7 14 L 7 18 C 7 21.300781 9.699219 24 13 24 L 15 24 L 15 26 L 11 26 L 11 28 L 21 28 L 21 26 L 17 26 L 17 24 L 19 24 C 22.300781 24 25 21.300781 25 18 L 25 14 L 23 14 L 23 18 C 23 20.21875 21.21875 22 19 22 L 13 22 C 10.78125 22 9 20.21875 9 18 L 9 14 Z'/%3E%3C/svg%3E")!important;
-}
-
 #dropButton{
 	font-size: 2em;
 	display: block;
@@ -2817,18 +2820,6 @@ span[data-action-type="stats-graphs-details-container"]>span{
 	height: 200px;
 	margin: 1.8%;
 	text-align: center;
-}
-#container-1 {
-	background-repeat: no-repeat;
-	background-size: 80px;
-	background-position: 50% 65%;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='342.728' height='325.878' viewBox='0 0 90.68 86.222' fill='none' stroke='%23000' stroke-width='5.6' stroke-linejoin='round' stroke-dashoffset='22.7149601' xmlns:v='https://vecta.io/nano'%3E%3Cpath d='M3.15 3.15h37.378v35.24H3.15zm47.002 0H87.53v35.24H50.152zM3.15 47.832h37.378v35.24H3.15zm47.002 0H87.53v35.24H50.152z'/%3E%3C/svg%3E");
-}
-#container-2 {
-	background-repeat: no-repeat;
-	background-size: 80px;
-	background-position: 50% 67%;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='347.569' height='278.797' viewBox='0 0 91.961 73.765' fill='none' stroke='%23000' xmlns:v='https://vecta.io/nano'%3E%3Cpath d='M3.02 3.02h85.921v54.399H3.02z' stroke-width='6.04' stroke-linejoin='round' stroke-dashoffset='22.7149601'/%3E%3Cg stroke-width='6.3'%3E%3Cpath d='M35.607 70.527l21.839.071' stroke-linecap='round' paint-order='markers fill stroke'/%3E%3Cpath d='M46.404 73.517l.142-15.596' paint-order='markers fill stroke'/%3E%3C/g%3E%3C/svg%3E");
 }
 .mainScreenShareButton {
 	padding: 18px;
@@ -2982,19 +2973,6 @@ span[data-action-type="stats-graphs-details-container"]>span{
     color: #ff9999;
 }
 
-#container-3 {
-	background-repeat: no-repeat;
-	background-size: 90px;
-	transition: background-image 0.3s ease-in-out;
-	background-position: 50% 65%;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='347.184' height='187.007' viewBox='0 0 91.859 49.479' fill='none' stroke='%23000' stroke-width='5' stroke-linejoin='round' xmlns:v='https://vecta.io/nano'%3E%3Cpath d='M3.15 3.15h65.569v43.179H3.15z' stroke-dashoffset='22.7149601' paint-order='markers fill stroke'/%3E%3Cpath d='M68.919 28.837L88.709 44.73V7.148L69.019 22.341z'/%3E%3C/svg%3E");
-}
-#container-3a {
-	background-repeat: no-repeat;
-	background-size: 90px;
-	transition: background-image 0.3s ease-in-out;
-	background-position: 50% 65%;
-}
 #container-4 {
 	background-repeat: no-repeat;
 	background-size: 80px;
@@ -3450,7 +3428,7 @@ iframe {
 .popup .menu { margin: 2px; }
 
 .toggleSize {
-	font-size: 32px;
+	font-size: 28px;
 	color: white;
 }
 
@@ -6571,9 +6549,6 @@ ul#audioSource3{
 }
 #refreshVideoButton > i{
 	cursor: pointer;
-	font-size: 120%;
-	position: relative;
-	top: 3px;
 }
 #webcamquality3{
 	margin-top: 10px;
@@ -7166,7 +7141,28 @@ body.darktheme ul#roomnotes {
 	content: "\f057"; }
 .la-sun:before {
 	content: "\f185"; }
-	
+.la-apple:before {
+	content: "\f179"; }
+.la-arrows-alt:before {
+	content: "\f0b2"; }
+.la-compress:before {
+	content: "\f066"; }
+.la-crosshairs:before {
+	content: "\f05b"; }
+.la-dollar-sign:before {
+	content: "\f155"; }
+.la-download:before {
+	content: "\f019"; }
+.la-exclamation-triangle:before {
+	content: "\f071"; }
+.la-file-download:before {
+	content: "\f56d"; }
+.la-pencil-alt:before {
+	content: "\f303"; }
+.la-satellite-dish:before {
+	content: "\f7c0"; }
+.la-wifi:before {
+	content: "\f1eb"; }
 
 /* Minimal visual refresh overrides — non-invasive, CSS-only. */
 /* CHANGES BELOW MADE 2025-08-22 */
@@ -7471,11 +7467,18 @@ ul#audioSource3 input:checked + label {
     box-shadow: 0 10px 28px rgba(0,0,0,0.35);
 }
 
-#subControlButtons div, #subControlButtons span button {
+#subControlButtons > div.float,
+#subControlButtons > div.float.hidden,
+#subControlButtons > div.task,
+#subControlButtons > div.float2,
+#subControlButtons > span button {
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
-#subControlButtons div:hover { border-radius: 8px; }
+#subControlButtons > div.float:hover,
+#subControlButtons > div.float.hidden:hover,
+#subControlButtons > div.task:hover,
+#subControlButtons > div.float2:hover { border-radius: 8px; }
 
 /* Controls grid buttons: consistent shape & hover */
 .controlsGrid button {
@@ -7521,11 +7524,6 @@ ul#audioSource3 input:checked + label {
 .close-btn:hover, .overlayCloseBtn:hover { color: var(--a-hover); }
 .darktheme .close-btn, .darktheme .overlayCloseBtn { color: var(--muted-icon); }
 .darktheme .close-btn:hover, .darktheme .overlayCloseBtn:hover { color: var(--a-dark-hover); }
-
-.director-link-icons .las { color: #5b6574; }
-.director-link-icons .las:hover { color: var(--a-hover); }
-.darktheme .director-link-icons .las { color: var(--muted-icon); }
-.darktheme .director-link-icons .las:hover { color: var(--a-dark-hover); }
 
 /* 14) Modal glass and alert polish (safe: background/border only) */
 .modal-content,
@@ -7665,9 +7663,6 @@ input[type="range"]::-moz-range-progress { height: 6px; background: var(--accent
 #videoname4 {
 	padding: 25px;
 }
-
-/* Subtle vertical balance for all tile headings */
-.column.card > i { margin-top: 17px!important;}
 
 .directorContainer, #guestFeeds, .hideLinksClass {
 	border-radius: 4px;
@@ -8334,8 +8329,16 @@ video.viewchroma-source-hidden {
 	--dark-background-color: #171717;
 }
 
-#header {
-	background-color: #171717;
+#header,
+.darktheme #header {
+	background-color: #171717 !important;
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+	border-bottom: none !important;
+}
+
+#head1 {
+	background-color: transparent;
 }
 
 .column {
@@ -8356,4 +8359,10 @@ video.viewchroma-source-hidden {
 .darktheme .card,
 .card {
 	border-radius: 16px;
+}
+
+#dropButton,
+#info,
+#credits {
+	display: none !important;
 }

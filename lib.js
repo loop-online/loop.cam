@@ -10176,6 +10176,9 @@ async function changeLg(lang, rtl = false, save = false) {
 								ele.innerHTML = translation.miscellaneous[ele.dataset.translate]; // use the misc translation if no main one is found
 							}
 						});
+						if (window.LoopIcons && window.LoopIcons.upgradeAll) {
+							window.LoopIcons.upgradeAll(document);
+						}
 						var allTitles = document.querySelectorAll("[title]");
 						allTitles.forEach(function (ele) {
 							if (ele.dataset.key) {
@@ -26719,26 +26722,26 @@ function audioMeter(mediaStreamSource, audioContext) {
 						meter4.style.width = total - 150 + "px";
 					}
 				}
-				if (document.getElementById("mutetoggle")) {
+				if (document.getElementById("mutebutton")) {
 					total *= 3;
 					if (total > 255) {
 						total = 255;
 					}
 					total = parseInt(total);
-					document.getElementById("mutetoggle").style.color = "rgb(" + (255 - total) + ",255," + (255 - total) + ")";
+					document.getElementById("mutebutton").style.setProperty("--mic-level", String(total));
 				}
 				meter1 = false;
 				return;
 			} else if (session.cleanOutput) {
 				meter1 = false;
 				return;
-			} else if (document.getElementById("mutetoggle")) {
+			} else if (document.getElementById("mutebutton")) {
 				total *= 3;
 				if (total > 255) {
 					total = 255;
 				}
 				total = parseInt(total);
-				document.getElementById("mutetoggle").style.color = "rgb(" + (255 - total) + ",255," + (255 - total) + ")";
+				document.getElementById("mutebutton").style.setProperty("--mic-level", String(total));
 			} else {
 				clearInterval(analyser.interval);
 				warnlog("METERS  NOT FOUND");
