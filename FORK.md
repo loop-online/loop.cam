@@ -91,6 +91,8 @@ Prefer keeping upstream names stable:
 Deliberate id divergences (keep through upstream merges):
 
 - The flip-camera glyph on `index.html` and `room.html` uses `id="flipcameratoggle"`. Upstream ships it as a second `id="settingstoggle"`, colliding with the real settings glyph (`las la-cog`) so `getElementById` only ever finds the first. The rename keeps `settingstoggle` unique per page. `scripts/verify-loop-ui-simplification.js` pins this; if an upstream merge reintroduces the duplicate, that verifier fails.
+- The apparent `id="main-js"` duplicate near the end of `room.html` is not a real duplicate. The live script tag carrying `id="main-js"` (`src="./main.js?ver=1065"`) sits just below an HTML-commented branding example that reuses the same id for copy-paste parity (`<script ... id="main-js" src="./main.js" data-translation="blank"></script>`). The commented copy never reaches the DOM, so there is zero runtime duplication and nothing to dedupe.
+- The `id="fileselector2"` duplicate in `room.html` is load-bearing and deliberately deferred. Two distinct `<input id="fileselector2">` elements are wired to different handlers — `session.changePublishFile(this,event)` and `session.hostFile(this,event)` — so upstream gave two genuinely different file pickers the same id. No discoverable UI trigger disambiguates which one a `getElementById("fileselector2")` caller expects, and renaming either risks breaking an unknown upstream caller. The duplicate is left as-is to avoid an unbounded-blast-radius rename.
 
 Brand the public surface instead:
 
