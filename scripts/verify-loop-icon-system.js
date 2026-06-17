@@ -166,17 +166,11 @@ if (glyphless.length) {
 }
 console.log(`Verified Lucide glyph presence for ${used.size} used Line Awesome hooks (incl. JS-injected).`);
 
-const wiredHtmlPages = [
-	"index.html",
-	"room.html",
-	"check.html",
-	"devices.html",
-	"electron.html",
-	"results.html",
-	"speedtest.html",
-	"supports.html",
-	"whip.html"
-];
+// Root-level only, matching this verifier's scope; a page is "wired" iff it loads the Loop icon runtime.
+const wiredHtmlPages = fs.readdirSync(root)
+	.filter(file => file.endsWith(".html"))
+	.filter(file => fs.readFileSync(path.join(root, file), "utf8").includes("loop-icons.js"))
+	.sort();
 
 assertUniformCacheVersions(
 	wiredHtmlPages,
