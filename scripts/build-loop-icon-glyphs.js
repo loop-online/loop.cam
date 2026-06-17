@@ -9,7 +9,6 @@ const glyphsOutPath = path.join(root, "loop-icon-glyphs.js");
 const mapOutPath = path.join(root, "loop-icon-line-map.js");
 
 const TARGET_MIN_DIM = 18;
-const TOGGLE_TARGET_MIN_DIM = 18;
 const MIN_TOGGLE_SCALE = 0.85;
 const MAX_SCALE = 1.75;
 const MAX_PAIR_SCALE = 1.35;
@@ -195,7 +194,7 @@ function computeOptical(nodes) {
 	const scale = Math.min(MAX_SCALE, TARGET_MIN_DIM / Math.max(minDim, 0.01));
 	const toggleScale = Math.min(
 		MAX_PAIR_SCALE,
-		Math.max(MIN_TOGGLE_SCALE, TOGGLE_TARGET_MIN_DIM / Math.max(minDim, 0.01))
+		Math.max(MIN_TOGGLE_SCALE, TARGET_MIN_DIM / Math.max(minDim, 0.01))
 	);
 	return {
 		scale: +scale.toFixed(3),

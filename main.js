@@ -547,8 +547,7 @@ async function main() {
 				getById("qos").innerHTML = "";
 				getById("logoname").innerHTML = "";
 				getById("helpbutton").classList.add("hidden");
-				getById("reportbutton").style.display = "none";
-				getById("reportbutton").style.opacity = 0;
+				getById("reportbutton").classList.add("hidden");
 				getById("dropButton").classList.add("hidden");
 				getById("container-4").classList.add("hidden");
 				if (!(urlParams.has("screenshare") || urlParams.has("ss"))) {
@@ -590,7 +589,7 @@ async function main() {
 			getById("qos").innerHTML = '<i class="las la-plug"></i>';
 			getById("logoname").innerHTML = getById("qos").outerHTML;
 			getById("helpbutton").classList.add("hidden");
-			getById("reportbutton").style.display = "none";
+			getById("reportbutton").classList.add("hidden");
 			getById("chatBody").innerHTML = "";
 			getById("qos").style.color = "#FFF7";
 			//getById("qos").style.fontSize = "70%";
@@ -5653,8 +5652,7 @@ async function main() {
 
 	if (isIFrame) {
 		getById("helpbutton").classList.add("hidden");
-		getById("reportbutton").style.display = "none";
-		getById("reportbutton").style.opacity = 0;
+		getById("reportbutton").classList.add("hidden");
 		getById("calendarButton").classList.add("hidden");
 		getById("chatBody").innerHTML = "";
 	}
@@ -6146,8 +6144,7 @@ async function main() {
 		getById("header").style.display = "none";
 		getById("controlButtons").classList.add("hidden");
 		getById("helpbutton").classList.add("hidden");
-		getById("reportbutton").style.display = "none";
-		getById("reportbutton").style.opacity = 0;
+		getById("reportbutton").classList.add("hidden");
 		getById("calendarButton").classList.add("hidden");
 		document.documentElement.style.setProperty("--myvideo-background", "#0000");
 		var styleTmp = document.createElement("style");

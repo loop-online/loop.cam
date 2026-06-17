@@ -1,13 +1,11 @@
 /* Loop Cam icon system — Lucide SVG rendered into upstream Line Awesome hooks. */
 
 :root {
-	--loop-icon-size-sm: 1rem;
 	--loop-icon-size-md: 1.25rem;
 	--loop-icon-size-lg: 2rem;
 	--loop-icon-size-toggle: 28px;
 	--loop-home-icon-size: 80px;
 	--loop-home-icon-top: 65%;
-	--loop-icon-muted: var(--muted-icon, #c8ccd4);
 	--loop-icon-on-surface: var(--discord-text, #e8eaed);
 	--mic-meter-color: #64c04d;
 }

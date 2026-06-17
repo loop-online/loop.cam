@@ -126,7 +126,8 @@
 	margin: 0;
 }
 
-#main:not(:has(.in-animation)) #head1 span {
+#main:not(:has(.in-animation)) #head1 span,
+.loop-home-prompt {
 	color: var(--loop-ui-muted);
 	font-size: 0.9375rem;
 	line-height: 1.4;
@@ -134,9 +135,6 @@
 
 .loop-home-prompt {
 	margin: 0.35rem 0 0;
-	color: var(--loop-ui-muted);
-	font-size: 0.9375rem;
-	line-height: 1.4;
 }
 
 #mainmenu .column.card:not(.in-animation):not(.skip-animation) {
@@ -285,7 +283,6 @@
 	.info-box
 ) {
 	display: block;
-	width: 100%;
 	max-width: var(--loop-ui-panel-width);
 	margin: 0.85rem auto 0;
 	padding: 0.75rem 0.85rem;

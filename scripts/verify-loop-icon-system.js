@@ -5,7 +5,16 @@ const http = require("node:http");
 const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
-const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const htmlCache = new Map();
+
+function readHtml(page) {
+	if (!htmlCache.has(page)) {
+		htmlCache.set(page, fs.readFileSync(path.join(root, page), "utf8"));
+	}
+	return htmlCache.get(page);
+}
+
+const indexHtml = readHtml("index.html");
 const map = JSON.parse(fs.readFileSync(path.join(__dirname, "loop-icon-line-map.json"), "utf8"));
 
 const requiredFiles = [
@@ -105,32 +114,39 @@ assert(indexHtml.includes("loop-icons.js"), "index.html must load loop-icons.js"
 
 const uiHtmlPages = ["index.html", "room.html"];
 uiHtmlPages.forEach(page => {
-	const source = fs.readFileSync(path.join(root, page), "utf8");
+	const source = readHtml(page);
 	assert(source.includes("loop-tokens.css"), `${page} must link loop-tokens.css`);
 	assert(source.includes("loop-ui.css"), `${page} must link loop-ui.css`);
 });
 
-function loopUiVersionsFromHtml(source) {
-	const tokensMatch = source.match(/loop-tokens\.css\?ver=(\d+)/);
-	const uiMatch = source.match(/loop-ui\.css\?ver=(\d+)/);
-	return {
-		tokens: tokensMatch ? tokensMatch[1] : null,
-		ui: uiMatch ? uiMatch[1] : null
-	};
+function assetVersionsFromHtml(source, assets) {
+	const versions = {};
+	for (const [key, basename] of Object.entries(assets)) {
+		const match = source.match(new RegExp(`${basename.replace(".", "\\.")}\\?ver=(\\d+)`));
+		versions[key] = match ? match[1] : null;
+	}
+	return versions;
 }
 
-const uiVersionSets = uiHtmlPages.map(page => {
-	const source = fs.readFileSync(path.join(root, page), "utf8");
-	const versions = loopUiVersionsFromHtml(source);
-	assert(versions.tokens && versions.ui, `${page} must link loop-tokens.css and loop-ui.css with ?ver=`);
-	return { page, ...versions };
-});
+function assertUniformCacheVersions(pages, assets, label) {
+	const versionSets = pages.map(page => {
+		const source = readHtml(page);
+		const versions = assetVersionsFromHtml(source, assets);
+		for (const [key, basename] of Object.entries(assets)) {
+			assert(versions[key], `${page} must link ${basename} with ?ver=`);
+		}
+		return { page, ...versions };
+	});
+	const keys = Object.keys(assets);
+	for (const key of keys) {
+		const values = new Set(versionSets.map(entry => entry[key]));
+		assert(values.size === 1, `${label} ${assets[key]} cache versions must match: ${JSON.stringify(versionSets)}`);
+	}
+	const summary = keys.map(key => `${key}=${[...new Set(versionSets.map(entry => entry[key]))][0]}`).join(" ");
+	console.log(`${label} cache version: ${summary} (${pages.length} pages)`);
+}
 
-const tokenVersions = new Set(uiVersionSets.map(entry => entry.tokens));
-const uiVersions = new Set(uiVersionSets.map(entry => entry.ui));
-assert(tokenVersions.size === 1, `loop-tokens.css cache versions must match: ${JSON.stringify(uiVersionSets)}`);
-assert(uiVersions.size === 1, `loop-ui.css cache versions must match: ${JSON.stringify(uiVersionSets)}`);
-console.log(`loop-ui cache version: tokens=${[...tokenVersions][0]} ui=${[...uiVersions][0]} (${uiHtmlPages.length} pages)`);
+assertUniformCacheVersions(uiHtmlPages, { tokens: "loop-tokens.css", ui: "loop-ui.css" }, "loop-ui");
 
 const glyphsSource = fs.readFileSync(path.join(root, "loop-icon-glyphs.js"), "utf8");
 assert(glyphsSource.includes("LoopIconOptical"), "loop-icon-glyphs.js must export LoopIconOptical");
@@ -153,27 +169,11 @@ const wiredHtmlPages = [
 	"whip.html"
 ];
 
-function loopIconVersionsFromHtml(source) {
-	const cssMatch = source.match(/loop-icons\.css\?ver=(\d+)/);
-	const jsMatch = source.match(/loop-icons\.js\?ver=(\d+)/);
-	return {
-		css: cssMatch ? cssMatch[1] : null,
-		js: jsMatch ? jsMatch[1] : null
-	};
-}
-
-const versionSets = wiredHtmlPages.map(page => {
-	const source = fs.readFileSync(path.join(root, page), "utf8");
-	const versions = loopIconVersionsFromHtml(source);
-	assert(versions.css && versions.js, `${page} must link loop-icons.css and loop-icons.js with ?ver=`);
-	return { page, ...versions };
-});
-
-const cssVersions = new Set(versionSets.map(entry => entry.css));
-const jsVersions = new Set(versionSets.map(entry => entry.js));
-assert(cssVersions.size === 1, `loop-icons.css cache versions must match across wired pages: ${JSON.stringify(versionSets)}`);
-assert(jsVersions.size === 1, `loop-icons.js cache versions must match across wired pages: ${JSON.stringify(versionSets)}`);
-console.log(`loop-icons cache version: css=${[...cssVersions][0]} js=${[...jsVersions][0]} (${wiredHtmlPages.length} pages)`);
+assertUniformCacheVersions(
+	wiredHtmlPages,
+	{ css: "loop-icons.css", js: "loop-icons.js" },
+	"loop-icons"
+);
 
 async function verifyBrowser() {
 	let chromium;
@@ -198,7 +198,6 @@ async function verifyBrowser() {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 30000 });
 		await page.waitForFunction(() => window.LoopIcons && window.LoopIcons.ready === true, { timeout: 10000 });
-		await page.waitForTimeout(300);
 
 		const engine = await page.evaluate(() => window.LoopIcons.engine);
 		assert(engine === "lucide", `LoopIcons engine should be lucide, got: ${engine}`);

@@ -192,18 +192,18 @@
 			return;
 		}
 		if (node.matches && node.matches(ICON_SELECTOR)) {
-			if (targets.indexOf(node) === -1) {
-				targets.push(node);
-			}
+			targets.add(node);
 			return;
 		}
 		if (node.querySelectorAll) {
 			node.querySelectorAll(ICON_SELECTOR).forEach(function (icon) {
-				if (targets.indexOf(icon) === -1) {
-					targets.push(icon);
-				}
+				targets.add(icon);
 			});
 		}
+	}
+
+	function isHomeCardId(id) {
+		return HOME_CARD_IDS.indexOf(id) !== -1;
 	}
 
 	function toggleAccordionChevron(id) {
@@ -211,9 +211,7 @@
 		if (!el) {
 			return;
 		}
-		el.classList.toggle("bottom");
-		el.classList.toggle("right");
-		var expanded = el.classList.contains("bottom");
+		var expanded = !el.classList.contains("bottom");
 		el.className =
 			"chevron las loop-affordance-expand " +
 			(expanded ? "bottom la-chevron-down" : "right la-chevron-right");
@@ -235,7 +233,7 @@
 				return;
 			}
 
-			var targets = [];
+			var targets = new Set();
 			var refreshHomeCards = false;
 
 			for (var i = 0; i < mutations.length; i += 1) {
@@ -254,33 +252,22 @@
 
 				var target = mutation.target;
 				if (target && target.matches && target.matches(ICON_SELECTOR)) {
-					if (targets.indexOf(target) === -1) {
-						targets.push(target);
-					}
+					targets.add(target);
 					continue;
 				}
 
-				if (
-					target &&
-					target.id &&
-					(target.id === "container-1" ||
-						target.id === "container-2" ||
-						target.id === "container-3" ||
-						target.id === "container-3a")
-				) {
+				if (target && target.id && isHomeCardId(target.id)) {
 					refreshHomeCards = true;
 				}
 			}
 
-			if (!targets.length && !refreshHomeCards) {
+			if (!targets.size && !refreshHomeCards) {
 				return;
 			}
 
 			upgrading = true;
 			try {
-				for (var j = 0; j < targets.length; j += 1) {
-					upgradeIconElement(targets[j]);
-				}
+				targets.forEach(upgradeIconElement);
 				if (refreshHomeCards) {
 					upgradeHomeCards(root);
 				}
@@ -322,7 +309,6 @@
 		engine: "lucide",
 		toggleMaxScale: 1.35,
 		upgradeAll: upgradeAll,
-		upgradeIcon: upgradeIconElement,
 		toggleAccordionChevron: toggleAccordionChevron,
 		init: init,
 		ready: false
