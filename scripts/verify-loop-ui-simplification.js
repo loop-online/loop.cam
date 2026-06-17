@@ -22,6 +22,16 @@ check(
 	'lib.js: loopVisibleHomeCards must stay [] (U5 dropped the non-core home-card reveal)'
 );
 
+// U1: getElementById("hiddenElements") resolves the first match, so a second
+// body-level #hiddenElements is dead weight. Each page must carry exactly one.
+for (const page of ["index.html", "room.html"]) {
+	const count = (read(page).match(/id="hiddenElements"/g) || []).length;
+	check(
+		count === 1,
+		`${page}: expected exactly one id="hiddenElements", found ${count} (U1 dedupe)`
+	);
+}
+
 // U6: advanced Create-a-Room controls collapse behind a disclosure on index.html.
 const indexHtml = read("index.html");
 check(
