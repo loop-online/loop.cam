@@ -88,6 +88,10 @@ Prefer keeping upstream names stable:
 - Keep `session.*` properties and action names unless a real bug requires changing them.
 - Avoid mass-renaming translation keys.
 
+Deliberate id divergences (keep through upstream merges):
+
+- The flip-camera glyph on `index.html` and `room.html` uses `id="flipcameratoggle"`. Upstream ships it as a second `id="settingstoggle"`, colliding with the real settings glyph (`las la-cog`) so `getElementById` only ever finds the first. The rename keeps `settingstoggle` unique per page. `scripts/verify-loop-ui-simplification.js` pins this; if an upstream merge reintroduces the duplicate, that verifier fails.
+
 Brand the public surface instead:
 
 - Logos, favicons, and social images.
