@@ -5195,6 +5195,8 @@ div.message-card a {
 }
 
 div.message-card:before {
+	font-family: 'Line Awesome Free';
+	font-weight: 900;
 	font-size: 2em;
 	margin-right: 0.5em;
 	position: absolute;
@@ -5203,11 +5205,11 @@ div.message-card:before {
 }
 
 div.message-card.warning:before {
-	content: "\26A0\FE0E";
+	content: "\f071";
 }
 
 div.message-card.info:before {
-	content: "\2139\FE0E";
+	content: "\f05a";
 }
 
 #whepShareStatus {
@@ -8040,6 +8042,22 @@ video.viewchroma-source-hidden {
 	--background-color: #171717;
 	--dark-background-color: #171717;
 	--loop-accent: #64c04d;
+}
+
+/* Message-card icons render via Unicode glyphs, not the (removed) Line Awesome
+   font. Overrides the upstream div.message-card:before glyph rules here so the
+   upstream section stays verbatim and future CSS refreshes stay mechanical. */
+div.message-card:before {
+	font-family: inherit;
+	font-weight: inherit;
+}
+
+div.message-card.warning:before {
+	content: "\26A0\FE0E";
+}
+
+div.message-card.info:before {
+	content: "\2139\FE0E";
 }
 
 #header,
