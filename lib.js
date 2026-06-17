@@ -42491,7 +42491,7 @@ function loadIframe(iframesrc, target) {
 	return iframe;
 }
 
-var loopVisibleHomeCards = ["container-5", "container-7"];
+var loopVisibleHomeCards = [];
 
 function dropDownButtonAction(ele) {
 	var ele = getById("dropButton");
