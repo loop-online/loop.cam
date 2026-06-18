@@ -75,7 +75,9 @@ function assertTranslationContract(relativePath) {
 			"add-your-camera",
 			"add-your-microphone",
 			"remote-screenshare-obs",
-			"info-blob"
+			"info-blob",
+			"max-resolution",
+			"smooth-cool"
 		]),
 		placeholders: new Set(),
 		miscellaneous: new Set()

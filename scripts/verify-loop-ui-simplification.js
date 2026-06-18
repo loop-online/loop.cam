@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+// Pins the Loop UI simplification pass (U1/U5/U6/U7). These are intentional,
+// merge-fragile edits to upstream-owned markup that no other verifier guards:
+// an upstream re-merge that silently reverts any of them should fail here.
+// Pure-node; runs without Playwright.
+
+const fs = require("fs");
+const path = require("path");
+const root = path.resolve(__dirname, "..");
+
+const read = file => fs.readFileSync(path.join(root, file), "utf8");
+const failures = [];
+const check = (condition, message) => {
+	if (!condition) failures.push(message);
+};
+
+// U5: the home "More Options" reveal no longer un-hides non-core VDO.Ninja cards.
+// The curated list must stay empty — re-introducing container ids re-exposes them.
+const libJs = read("lib.js");
+check(
+	/var loopVisibleHomeCards\s*=\s*\[\s*\]/.test(libJs),
+	'lib.js: loopVisibleHomeCards must stay [] (U5 dropped the non-core home-card reveal)'
+);
+
+// U1: getElementById("hiddenElements") resolves the first match, so a second
+// body-level #hiddenElements is dead weight. Each page must carry exactly one.
+for (const page of ["index.html", "room.html"]) {
+	// Match either quote style: upstream VDO.Ninja markup mixes id='...' and id="...".
+	const count = (read(page).match(/id=["']hiddenElements["']/g) || []).length;
+	check(
+		count === 1,
+		`${page}: expected exactly one id="hiddenElements", found ${count} (U1 dedupe)`
+	);
+}
+
+// U6: advanced Create-a-Room controls collapse behind a disclosure on both the
+// landing (index.html) and the room form (room.html).
+for (const page of ["index.html", "room.html"]) {
+	const src = read(page);
+	check(
+		/<tbody id="roomAdvanced"[^>]*\shidden\b/.test(src),
+		`${page}: <tbody id="roomAdvanced"> must carry the hidden attribute (U6 disclosure default-collapsed)`
+	);
+	const toggleMatches = src.match(/class="loop-disclosure-toggle"/g) || [];
+	check(
+		toggleMatches.length === 1,
+		`${page}: expected exactly one .loop-disclosure-toggle, found ${toggleMatches.length}`
+	);
+	const toggleTag = (src.match(/<button[^>]*class="loop-disclosure-toggle"[^>]*>/) || [])[0] || "";
+	check(
+		/aria-controls="roomAdvanced"/.test(toggleTag),
+		`${page}: .loop-disclosure-toggle must set aria-controls="roomAdvanced"`
+	);
+	check(
+		/aria-expanded="false"/.test(toggleTag),
+		`${page}: .loop-disclosure-toggle must default aria-expanded="false"`
+	);
+}
+check(
+	read("loop-ui.css").includes(".loop-disclosure-toggle {"),
+	'loop-ui.css: must define the .loop-disclosure-toggle rule (U6 styling)'
+);
+
+// U7: flip-camera glyph owns flipcameratoggle; the settings glyph keeps settingstoggle.
+// Pre-pass both pages shared id="settingstoggle" across two distinct controls.
+for (const page of ["index.html", "room.html"]) {
+	const src = read(page);
+	check(
+		src.includes('id="flipcameratoggle" class="toggleSize las la-sync-alt"'),
+		`${page}: flip-camera glyph must use id="flipcameratoggle" (U7 dedupe)`
+	);
+	check(
+		!/id=["']settingstoggle["'][^>]*la-sync-alt/.test(src),
+		`${page}: id="settingstoggle" must not sit on the la-sync-alt (flip-camera) glyph`
+	);
+	const settingsCount = (src.match(/id=["']settingstoggle["']/g) || []).length;
+	check(
+		settingsCount === 1,
+		`${page}: expected exactly one id="settingstoggle", found ${settingsCount}`
+	);
+}
+
+if (failures.length) {
+	console.error("Loop UI simplification pass verification FAILED:\n");
+	console.error(failures.map(f => `  - ${f}`).join("\n"));
+	process.exit(1);
+}
+
+console.log("Loop UI simplification pass verified (U1 hiddenElements dedupe, U5 home cards, U6 room disclosure, U7 toggle ids).");

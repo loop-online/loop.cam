@@ -254,6 +254,17 @@ i.las.la-chevron-down.loop-affordance-dropdown:not(.bottom) .loop-icon-svg {
 	--loop-home-icon-top: 67%;
 }
 
+#container-2 .screenshare-icon :is(i.las.loop-icon-upgraded, i.las:has(> svg.loop-icon-svg)) {
+	width: 100%;
+	color: var(--loop-icon-on-surface);
+}
+
+#container-2 .screenshare-icon .loop-icon-svg {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1 / 1;
+}
+
 .loop-home-card-icon .loop-icon-svg {
 	width: var(--loop-home-icon-size);
 	height: var(--loop-home-icon-size);

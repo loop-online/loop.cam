@@ -236,6 +236,13 @@
 	border-color: #6b7280;
 }
 
+:is(.in-animation, .skip-animation) .outer.close:focus-visible,
+.gowebcam:focus-visible,
+.gobutton:focus-visible {
+	outline: 2px solid var(--loop-ui-accent);
+	outline-offset: 2px;
+}
+
 :is(.in-animation, .skip-animation) .outer.close .labelclass {
 	display: none;
 }
@@ -422,7 +429,7 @@
 	height: 5px;
 	max-width: 2.5rem;
 	margin: 0;
-	border-radius: 999px;
+	border-radius: var(--loop-ui-radius-pill);
 }
 
 :is(.in-animation, .skip-animation) #audioMenu .meter,
@@ -824,7 +831,7 @@
 	align-items: center;
 	gap: 0.15rem;
 	padding: 0.2rem 0.35rem;
-	border-radius: 999px;
+	border-radius: var(--loop-ui-radius-pill);
 	background: rgb(23 23 23 / 0.88);
 	border: 1px solid var(--loop-ui-border);
 	backdrop-filter: blur(8px);
@@ -846,7 +853,7 @@
 	justify-content: center;
 	width: 44px;
 	height: 44px;
-	border-radius: 10px;
+	border-radius: var(--loop-ui-radius-sm);
 	cursor: pointer;
 	color: var(--loop-ui-muted);
 	transition: background var(--loop-ui-transition), color var(--loop-ui-transition);
@@ -1254,4 +1261,41 @@ input.gobutton {
 
 #subControlButtons :is(.loop-icon-upgraded, .toggleSize.las) {
 	font-size: 0 !important;
+}
+
+/* Create-a-Room advanced-options disclosure: collapses SSO, codec, broadcast,
+   director-performs, and approval controls off the default room surface. */
+.loop-disclosure-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 8px 14px;
+	font: inherit;
+	color: var(--loop-ui-text);
+	background: transparent;
+	border: 1px solid var(--loop-ui-border);
+	border-radius: var(--loop-ui-radius-sm);
+	cursor: pointer;
+	transition: border-color var(--loop-ui-transition);
+}
+
+.loop-disclosure-toggle:hover {
+	border-color: var(--loop-ui-accent);
+}
+
+.loop-disclosure-toggle:focus-visible {
+	outline: 2px solid var(--loop-ui-accent);
+	outline-offset: 2px;
+}
+
+.loop-disclosure-toggle::after {
+	content: "\203A";
+	font-size: 1.2em;
+	line-height: 1;
+	transition: transform var(--loop-ui-transition);
+}
+
+.loop-disclosure-toggle[aria-expanded="true"]::after {
+	transform: rotate(90deg);
 }

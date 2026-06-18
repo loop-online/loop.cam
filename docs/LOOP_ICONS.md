@@ -50,7 +50,7 @@ Full mapping: `scripts/loop-icon-line-map.json`.
 1. If upstream adds new `la-*` classes, add a mapping entry and run `npm run build:icons`.
 2. Re-run `node scripts/extract-line-icon-usage.js` and `node scripts/verify-loop-icon-system.js`.
 3. Keep visual/a11y rules in `loop-icons.css` / `loop-icons.js` — not scattered in `lib.js`.
-4. Line Awesome font subset in `main.css` may remain for un-upgraded edge pages; promoted surfaces use Lucide via the upgrader.
+4. The Line Awesome font has been removed from the repo and `main.css`. Lucide is the only renderer; run `node scripts/verify-loop-icon-coverage.js` after touching icons — it fails if any page uses a `la-*` hook without loading `loop-icons.js` or without a Lucide mapping.
 5. Lucide license: ISC (see [Lucide license](https://github.com/lucide-icons/lucide/blob/main/LICENSE)).
 
 ## Pages wired
@@ -58,7 +58,7 @@ Full mapping: `scripts/loop-icon-line-map.json`.
 - `index.html`, `room.html` (main app)
 - Auxiliary: `whip.html`, `speedtest.html`, `electron.html`, `devices.html`, `check.html`, `results.html`, `supports.html`
 
-Other HTML routes still reference Line Awesome only if they do not load `loop-icons.js`.
+Every HTML route that uses `la-*` hooks loads `loop-icons.js` and renders Lucide — there is no font fallback. `scripts/verify-loop-icon-coverage.js` enforces it.
 
 ## Accessibility
 

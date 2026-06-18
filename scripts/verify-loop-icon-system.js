@@ -157,17 +157,28 @@ if (unmapped.length) {
 	throw new Error(`Unmapped Line Awesome icons on promoted surfaces: ${unmapped.join(", ")}`);
 }
 
-const wiredHtmlPages = [
-	"index.html",
-	"room.html",
-	"check.html",
-	"devices.html",
-	"electron.html",
-	"results.html",
-	"speedtest.html",
-	"supports.html",
-	"whip.html"
-];
+eval(glyphsSource);
+const glyphs = globalThis.LoopIconGlyphs;
+assert(glyphs && typeof glyphs === "object", "loop-icon-glyphs.js must define LoopIconGlyphs");
+const glyphless = [...new Set([...used].map(name => map[name]))].filter(lucide => !glyphs[lucide]).sort();
+if (glyphless.length) {
+	throw new Error(`Mapped icons missing a Lucide glyph (runtime upgrade would no-op): ${glyphless.join(", ")}`);
+}
+console.log(`Verified Lucide glyph presence for ${used.size} used Line Awesome hooks (incl. JS-injected).`);
+
+// Root-level only, matching this verifier's scope; a page is "wired" iff it loads the Loop icon runtime.
+const wiredHtmlPages = fs.readdirSync(root)
+	.filter(file => file.endsWith(".html"))
+	.filter(file => fs.readFileSync(path.join(root, file), "utf8").includes("loop-icons.js"))
+	.sort();
+
+// Floor against a broken derivation (wrong cwd, renamed runtime ref): a near-empty
+// set would otherwise reach assertUniformCacheVersions and throw a cryptic message
+// instead of flagging that coverage silently collapsed. index/room are always wired.
+assert(
+	wiredHtmlPages.includes("index.html") && wiredHtmlPages.includes("room.html"),
+	`wiredHtmlPages derivation collapsed (got ${wiredHtmlPages.length}: ${wiredHtmlPages.join(", ") || "none"}); expected to include index.html and room.html`
+);
 
 assertUniformCacheVersions(
 	wiredHtmlPages,

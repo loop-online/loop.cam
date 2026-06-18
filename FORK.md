@@ -2,6 +2,25 @@
 
 Loop Cam is a branded, focused fork of VDO.Ninja. The goal is to stay close enough to upstream that future updates remain practical, while presenting a simpler Loop product surface for production-source workflows.
 
+## Relationship to VDO.Ninja (read this first)
+
+**Loop Cam is Loop's own fork.** All product work happens in [loop-online/loop.cam](https://github.com/loop-online/loop.cam). We are **not** contributing changes back to the original [steveseguin/vdo.ninja](https://github.com/steveseguin/vdo.ninja) project.
+
+The upstream repo exists here only as a **read-only update source**:
+
+- `git fetch upstream` — see what changed upstream
+- Review, merge, or cherry-pick into Loop's `main` when we want those fixes
+- Reapply Loop branding and surface policy as a thin layer on top
+
+Do **not** open pull requests to VDO.Ninja for Loop-specific work. Do **not** treat upstream as a place to land Loop features, docs, or branding. If something belongs in Loop Cam, it belongs in this repo.
+
+Remotes:
+
+| Remote | Repo | Purpose |
+|--------|------|---------|
+| `origin` | `loop-online/loop.cam` | **Canonical Loop Cam** — push here, deploy from here |
+| `upstream` | `steveseguin/vdo.ninja` | **Update source only** — fetch and merge; no contributions |
+
 ## Product Scope
 
 Loop Cam supports these primary workflows:
@@ -69,6 +88,12 @@ Prefer keeping upstream names stable:
 - Keep `session.*` properties and action names unless a real bug requires changing them.
 - Avoid mass-renaming translation keys.
 
+Deliberate id divergences (keep through upstream merges):
+
+- The flip-camera glyph on `index.html` and `room.html` uses `id="flipcameratoggle"`. Upstream ships it as a second `id="settingstoggle"`, colliding with the real settings glyph (`las la-cog`) so `getElementById` only ever finds the first. The rename keeps `settingstoggle` unique per page. `scripts/verify-loop-ui-simplification.js` pins this; if an upstream merge reintroduces the duplicate, that verifier fails.
+- The apparent `id="main-js"` duplicate near the end of `room.html` is not a real duplicate. The live script tag carrying `id="main-js"` (`src="./main.js?ver=1065"`) sits just below an HTML-commented branding example that reuses the same id for copy-paste parity (`<script ... id="main-js" src="./main.js" data-translation="blank"></script>`). The commented copy never reaches the DOM, so there is zero runtime duplication and nothing to dedupe.
+- The `id="fileselector2"` duplicate in `room.html` is load-bearing and deliberately deferred. Two distinct `<input id="fileselector2">` elements are wired to different handlers — `session.changePublishFile(this,event)` and `session.hostFile(this,event)` — so upstream gave two genuinely different file pickers the same id. No discoverable UI trigger disambiguates which one a `getElementById("fileselector2")` caller expects, and renaming either risks breaking an unknown upstream caller. The duplicate is left as-is to avoid an unbounded-blast-radius rename.
+
 Brand the public surface instead:
 
 - Logos, favicons, and social images.
@@ -88,7 +113,7 @@ Loop Cam **renders Lucide icons** (ISC) while keeping upstream **Line Awesome cl
 - **Adding icons** — Map new `la-*` token → Lucide name, rebuild glyphs, run `node scripts/verify-loop-icon-system.js`
 - **Docs** — `docs/LOOP_ICONS.md`
 
-Line Awesome font files remain in the repo for legacy/unwired pages; promoted surfaces do not depend on the icon font once upgraded.
+The Line Awesome font has been removed from the repo and `main.css` — Lucide is the only icon renderer. Every HTML page that uses `las la-*` hooks loads `loop-icons.js` and every hook maps to a Lucide glyph; `scripts/verify-loop-icon-coverage.js` enforces this and fails if any page uses a hook without the upgrader or without a mapping. The three former CSS-glyph icons (message-card warning/info, selected-device check) now use native Unicode glyphs.
 
 
 Good cleanup reduces maintenance cost or user confusion:
@@ -109,7 +134,7 @@ Risky cleanup should wait for stronger tests:
 
 ## Upgrade Strategy
 
-When refreshing from VDO.Ninja upstream:
+When refreshing from VDO.Ninja upstream (fetch/merge only — not contributing back):
 
 1. Preserve the current Loop worktree and remove local artifact noise from the diff.
 2. Fetch upstream and review file-level changes before merging.
