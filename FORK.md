@@ -115,6 +115,17 @@ Loop Cam **renders Lucide icons** (ISC) while keeping upstream **Line Awesome cl
 
 The Line Awesome font has been removed from the repo and `main.css` — Lucide is the only icon renderer. Every HTML page that uses `las la-*` hooks loads `loop-icons.js` and every hook maps to a Lucide glyph; `scripts/verify-loop-icon-coverage.js` enforces this and fails if any page uses a hook without the upgrader or without a mapping. The three former CSS-glyph icons (message-card warning/info, selected-device check) now use native Unicode glyphs.
 
+## Design System
+
+The Loop Cam design system is **Loop-owned**, not upstream. These are canonical artifacts; treat them as Loop surface during upstream-drift triage:
+
+- **Human spec** — `DESIGN.md` (colors, typography, elevation, components, do's/don'ts)
+- **Machine-readable tokens** — `.impeccable/design.json` (color ramps, shadows, motion, component snippets)
+- **Product context** — `PRODUCT.md`, `AGENTS.md`, and the `docs/DESIGN.md` / `docs/PRODUCT.md` pointers
+- **Implementation** — `loop-tokens.css` (the `--loop-*` token layer) and `loop-ui.css` carry the values; `main.css` stays upstream-first with Loop overrides in its labeled block
+
+`scripts/verify-loop-design-tokens.js` pins the implementation to the spec — accent, surface fallbacks, radii, shadows, and motion in the CSS must stay consistent with `.impeccable/design.json` and `DESIGN.md`, and the verifier fails closed if the design source is missing. An upstream re-merge that drops a `--discord-grey-*` variable or a hand-edit that desyncs token from spec fails here.
+
 
 Good cleanup reduces maintenance cost or user confusion:
 
