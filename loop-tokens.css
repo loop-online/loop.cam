@@ -32,3 +32,24 @@
 	--loop-z-modal: 50;
 	--loop-z-toast: 60;
 }
+
+/*
+ * Dark-theme surface pin. DESIGN.md canonicalizes the Loop dark theme's
+ * Surface (#404249, --discord-grey-7) and Surface Raised (#313338,
+ * --discord-grey-5). Under prefers-color-scheme:dark, main.css softens those
+ * shared greys to #3a3d45/#2f3237 ("soften Discord greys slightly"). The home
+ * cards style their dark background as `.darktheme .card { background:
+ * var(--discord-grey-7) }`, and the --loop-ui-* surface tokens fall back through
+ * the same greys, so that softening drags every dark Loop surface off-spec.
+ * Re-pin the two greys to canonical in the dark scheme so the cards and the
+ * --loop-ui-* tokens resolve to the documented Surface values. This file loads
+ * after main.css, so the override wins. Scope is the dark theme only: the
+ * upstream light theme (.card -> --lighttheme-3) and main.css's other dark
+ * softening (text, link, accent colors) are left untouched.
+ */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--discord-grey-5: #313338;
+		--discord-grey-7: #404249;
+	}
+}

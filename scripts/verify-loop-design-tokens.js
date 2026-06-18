@@ -59,15 +59,26 @@ const accentRamp = ramp("accent");
 check(accentRamp.includes("#64c04d"), 'design.json: accent tonalRamp must include canonical Loop Green #64c04d');
 check(/--loop-accent:\s*#64c04d\b/.test(tokensLc), 'loop-tokens.css: --loop-accent must be #64c04d (canonical Loop Green)');
 
-// Surface fallbacks must equal the documented canonical greys. NOTE: these are
-// the var() *fallbacks*, used only if main.css drops --discord-grey-7/5. In the
-// live cascade main.css defines them — to #404249/#313338 in :root, but to
-// #3a3d45/#2f3237 under @media (prefers-color-scheme: dark). This pins the
-// fallback value, not the dark-mode resolved value (see PR residual findings).
+// Surface fallbacks must equal the documented canonical greys. These are the
+// var() *fallbacks*, used only if main.css drops --discord-grey-7/5. In the live
+// cascade main.css defines them — to #404249/#313338 in :root, and softened to
+// #3a3d45/#2f3237 under @media (prefers-color-scheme: dark). The dark-pin block
+// below restores the canonical greys in that scheme, so the resolved dark-mode
+// surface matches the fallback rather than the softened value.
 check(/--loop-ui-surface:\s*var\(\s*--discord-grey-7\s*,\s*#404249\s*\)/.test(tokensLc),
 	'loop-tokens.css: --loop-ui-surface fallback must be #404249 (canonical Surface)');
 check(/--loop-ui-surface-raised:\s*var\(\s*--discord-grey-5\s*,\s*#313338\s*\)/.test(tokensLc),
 	'loop-tokens.css: --loop-ui-surface-raised fallback must be #313338 (canonical Surface Raised)');
+
+// Dark-theme surface pin: loop-tokens.css must re-pin the softened greys to
+// canonical inside a prefers-color-scheme:dark :root block, so the home cards
+// (.darktheme .card -> --discord-grey-7) and the --loop-ui-* tokens resolve
+// on-spec in dark mode instead of main.css's #3a3d45/#2f3237 softening.
+const darkPin = (tokensLc.match(/@media\s*\(\s*prefers-color-scheme:\s*dark\s*\)\s*\{\s*:root\s*\{([^}]*)\}/) || [])[1] || "";
+check(/--discord-grey-7:\s*#404249\b/.test(darkPin),
+	'loop-tokens.css: prefers-color-scheme:dark block must pin --discord-grey-7 to #404249 (canonical Surface)');
+check(/--discord-grey-5:\s*#313338\b/.test(darkPin),
+	'loop-tokens.css: prefers-color-scheme:dark block must pin --discord-grey-5 to #313338 (canonical Surface Raised)');
 check(surfaceRamp.includes("#404249") && surfaceRamp.includes("#313338"),
 	'design.json: surface tonalRamp must include #404249 and #313338 (Surface / Surface Raised)');
 
@@ -165,4 +176,4 @@ if (failures.length) {
 	process.exit(1);
 }
 
-console.log("Loop design-system contract verified (tokens, surface fallbacks, colors, radii, shadows/motion, doc surface).");
+console.log("Loop design-system contract verified (tokens, surface fallbacks, dark-mode pin, colors, radii, shadows/motion, doc surface).");
