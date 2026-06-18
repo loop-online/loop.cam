@@ -7,8 +7,8 @@
 	--loop-accent-ink: #111;
 
 	--loop-ui-bg: #171717;
-	--loop-ui-surface: var(--discord-grey-7, #2f3136);
-	--loop-ui-surface-raised: var(--discord-grey-5, #383a40);
+	--loop-ui-surface: var(--discord-grey-7, #404249);
+	--loop-ui-surface-raised: var(--discord-grey-5, #313338);
 	--loop-ui-border: #4a4d55;
 	--loop-ui-text: var(--discord-text, #e8eaed);
 	--loop-ui-muted: #a8b0bd;
