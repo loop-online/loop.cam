@@ -204,6 +204,7 @@ node scripts/verify-fork-contract.js
 node scripts/verify-translation-health.js
 node scripts/verify-optional-root-scope.js
 node scripts/verify-loop-css-contract.js
+node scripts/verify-loop-design-tokens.js
 node scripts/classify-fork-drift.js index.html main.js lib.js webrtc.js main.css iframe.html iframe-examples.js thirdparty/CodecsHandler.js
 node scripts/verify-iframe-examples.js
 node scripts/verify-screen-share-effects-dom.js
@@ -242,6 +243,7 @@ In Codex Desktop, the bundled runtime can run it with:
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-translation-health.js
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-optional-root-scope.js
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-loop-css-contract.js
+/Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-loop-design-tokens.js
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-iframe-examples.js
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-screen-share-effects-dom.js
 /Users/robdezendorf/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verify-whip-error-callback.js

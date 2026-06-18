@@ -20,4 +20,5 @@
 - `main.css` stays upstream-first; Loop styling lives in the labeled `Loop Cam surface overrides` block at the end.
 - Before upstream refreshes, run `classify-fork-drift.js`, `audit-upstream-drift.js`, and `verify-fork-contract.js`; validate with the full `scripts/verify-*.js` suite.
 - Icons render Lucide SVG via `loop-icons.js` while keeping upstream `las la-*` class names; rebuild with `npm run build:icons` and verify with `npm run verify:icons` (see `docs/LOOP_ICONS.md`).
+- The design system is Loop-owned: `DESIGN.md` (human spec) + `.impeccable/design.json` (machine tokens) are canonical; `loop-tokens.css`/`loop-ui.css` implement them. Verify with `npm run verify:design`; `npm run verify` runs the icon and design contracts together (also wired as `npm test`).
 - Local dev server: `python3 scripts/dev-server.py` (default port 8765).

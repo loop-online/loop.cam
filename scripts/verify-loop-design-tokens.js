@@ -6,19 +6,35 @@
 // drifting hand-edit that desyncs spec and implementation should fail here.
 // Pure-node; runs without Playwright.
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 
-const read = file => fs.readFileSync(path.join(root, file), "utf8");
-const exists = file => fs.existsSync(path.join(root, file));
 const failures = [];
 const check = (condition, message) => {
 	if (!condition) failures.push(message);
 };
 
-// Fail closed with a clear message if the canonical source is missing or
-// unparseable, rather than throwing an opaque stack later.
+// Read a repo file fail-closed: a missing or renamed canonical file (a plausible
+// upstream re-merge outcome — the exact drift this verifier guards) reports as a
+// contract failure with a clear message, never an opaque ENOENT stack later.
+// Line endings are normalized so a CRLF checkout cannot break \n-anchored regexes.
+const cache = {};
+const read = file => {
+	if (file in cache) return cache[file];
+	try {
+		return (cache[file] = fs.readFileSync(path.join(root, file), "utf8").replace(/\r\n/g, "\n"));
+	} catch (error) {
+		console.error("Loop design-system contract verification FAILED:\n");
+		console.error(`  - ${file} is missing or unreadable (${error.message})`);
+		process.exit(1);
+	}
+};
+const exists = file => fs.existsSync(path.join(root, file));
+const lc = s => s.toLowerCase();
+
+// Canonical machine source. Parsed fail-closed so a missing or malformed file
+// reports a contract violation rather than an opaque stack.
 let design;
 try {
 	design = JSON.parse(read(".impeccable/design.json"));
@@ -29,51 +45,107 @@ try {
 }
 
 const tokens = read("loop-tokens.css");
+const tokensLc = lc(tokens);
 // Shadows and motion live in loop-ui.css/loop-tokens.css; search both.
-const loopCss = tokens + "\n" + read("loop-ui.css");
+const loopCssLc = lc(tokens + "\n" + read("loop-ui.css"));
 
-const surfaceRamp = (design.extensions && design.extensions.colorMeta
-	&& design.extensions.colorMeta.surface && design.extensions.colorMeta.surface.tonalRamp) || [];
-const accentRamp = (design.extensions && design.extensions.colorMeta
-	&& design.extensions.colorMeta.accent && design.extensions.colorMeta.accent.tonalRamp) || [];
+const colorMeta = (design.extensions && design.extensions.colorMeta) || {};
+const ramp = key => (((colorMeta[key] && colorMeta[key].tonalRamp) || []).map(lc));
+const surfaceRamp = ramp("surface");
+const accentRamp = ramp("accent");
 
 // Accent: the one green. Canonical hex must appear in the design.json ramp and
-// be declared as the Loop accent token.
+// be declared as the Loop accent token. Hex compares are case-insensitive.
 check(accentRamp.includes("#64c04d"), 'design.json: accent tonalRamp must include canonical Loop Green #64c04d');
-check(/--loop-accent:\s*#64c04d\b/.test(tokens), 'loop-tokens.css: --loop-accent must be #64c04d (canonical Loop Green)');
+check(/--loop-accent:\s*#64c04d\b/.test(tokensLc), 'loop-tokens.css: --loop-accent must be #64c04d (canonical Loop Green)');
 
-// Surface fallbacks must equal the documented canonical greys. main.css resolves
-// --discord-grey-7/5 to these today; the fallback must not drift off-spec.
-check(/--loop-ui-surface:\s*var\(--discord-grey-7,\s*#404249\)/.test(tokens),
+// Surface fallbacks must equal the documented canonical greys. NOTE: these are
+// the var() *fallbacks*, used only if main.css drops --discord-grey-7/5. In the
+// live cascade main.css defines them — to #404249/#313338 in :root, but to
+// #3a3d45/#2f3237 under @media (prefers-color-scheme: dark). This pins the
+// fallback value, not the dark-mode resolved value (see PR residual findings).
+check(/--loop-ui-surface:\s*var\(\s*--discord-grey-7\s*,\s*#404249\s*\)/.test(tokensLc),
 	'loop-tokens.css: --loop-ui-surface fallback must be #404249 (canonical Surface)');
-check(/--loop-ui-surface-raised:\s*var\(--discord-grey-5,\s*#313338\)/.test(tokens),
+check(/--loop-ui-surface-raised:\s*var\(\s*--discord-grey-5\s*,\s*#313338\s*\)/.test(tokensLc),
 	'loop-tokens.css: --loop-ui-surface-raised fallback must be #313338 (canonical Surface Raised)');
 check(surfaceRamp.includes("#404249") && surfaceRamp.includes("#313338"),
 	'design.json: surface tonalRamp must include #404249 and #313338 (Surface / Surface Raised)');
 
+// DESIGN.md frontmatter is the human spec. Extract an indented child block under
+// a top-level `key:` line, robust to key ordering and the block being last
+// (terminates on the next non-indented line or end of frontmatter).
+const frontmatter = (read("DESIGN.md").match(/^---\n([\s\S]*?)\n---/) || [])[1] || "";
+check(frontmatter, "DESIGN.md: YAML frontmatter block must be present");
+const childBlock = key => {
+	const m = frontmatter.match(new RegExp(`^${key}:\\n((?:[ \\t]+.*(?:\\n|$))+)`, "m"));
+	return m ? m[1] : "";
+};
+
+// Effective hex of a token declaration: the var() fallback when present, else
+// the literal hex.
+const effectiveHex = decl => {
+	const fallback = decl.match(/var\([^,]+,\s*(#[0-9a-f]{3,8})\s*\)/);
+	if (fallback) return fallback[1];
+	const plain = decl.match(/#[0-9a-f]{3,8}/);
+	return plain ? plain[0] : null;
+};
+const tokenValue = token => {
+	const m = tokensLc.match(new RegExp(`${token}:\\s*([^;]+);`));
+	return m ? m[1].trim() : null;
+};
+
+// Colors: cross-check the canonical colors that map to a --loop-* token. The
+// frontmatter color map is the least-guarded leg of the contract — a hand-edit
+// that desyncs DESIGN.md from the implementation must fail here.
+const colorsBlock = childBlock("colors");
+const colorToken = {
+	canvas: "--loop-ui-bg",
+	surface: "--loop-ui-surface",
+	"surface-raised": "--loop-ui-surface-raised",
+	border: "--loop-ui-border",
+	"text-primary": "--loop-ui-text",
+	"text-muted": "--loop-ui-muted",
+	accent: "--loop-accent",
+};
+for (const [key, token] of Object.entries(colorToken)) {
+	const specMatch = colorsBlock.match(new RegExp(`\\b${key}:\\s*"(#[0-9a-fA-F]{3,8})"`));
+	check(specMatch, `DESIGN.md: colors.${key} must be defined in frontmatter`);
+	if (specMatch) {
+		const value = lc(specMatch[1]);
+		const decl = tokenValue(token);
+		const actual = decl && effectiveHex(decl);
+		check(actual === value,
+			`loop-tokens.css: ${token} must resolve to ${value} to match DESIGN.md colors.${key} (found ${actual || "none"})`);
+	}
+}
+
 // Radii: DESIGN.md frontmatter `rounded` is the spec; loop-tokens.css must match.
-const designMd = read("DESIGN.md");
-const roundedBlock = (designMd.match(/^rounded:\n([\s\S]*?)\n[a-z]/m) || [])[1] || "";
+const roundedBlock = childBlock("rounded");
 const radiusKeys = { sm: "--loop-ui-radius-sm", md: "--loop-ui-radius-md", lg: "--loop-ui-radius-lg", pill: "--loop-ui-radius-pill" };
 for (const [key, token] of Object.entries(radiusKeys)) {
 	const specMatch = roundedBlock.match(new RegExp(`\\b${key}:\\s*"([^"]+)"`));
 	check(specMatch, `DESIGN.md: rounded.${key} must be defined in frontmatter`);
 	if (specMatch) {
 		const value = specMatch[1];
-		const tokenMatch = tokens.match(new RegExp(`${token}:\\s*([^;]+);`));
-		check(tokenMatch && tokenMatch[1].trim() === value,
-			`loop-tokens.css: ${token} must be ${value} to match DESIGN.md rounded.${key} (found ${tokenMatch ? tokenMatch[1].trim() : "none"})`);
+		const decl = tokenValue(token);
+		check(decl === value,
+			`loop-tokens.css: ${token} must be ${value} to match DESIGN.md rounded.${key} (found ${decl || "none"})`);
 	}
 }
 
-// Shadows and motion declared in design.json must appear in the Loop CSS.
-for (const shadow of (design.extensions && design.extensions.shadows) || []) {
-	check(loopCss.includes(shadow.value),
+// Shadows and motion declared in design.json must appear in the Loop CSS. Guard
+// the arrays so an emptied/removed key cannot silently disable enforcement.
+const shadows = (design.extensions && design.extensions.shadows) || [];
+const motion = (design.extensions && design.extensions.motion) || [];
+check(shadows.length > 0, "design.json: extensions.shadows must be present and non-empty");
+check(motion.length > 0, "design.json: extensions.motion must be present and non-empty");
+for (const shadow of shadows) {
+	check(loopCssLc.includes(lc(shadow.value)),
 		`loop CSS must use the "${shadow.name}" shadow ${shadow.value} (design.json elevation)`);
 }
-for (const motion of (design.extensions && design.extensions.motion) || []) {
-	check(loopCss.includes(motion.value),
-		`loop CSS must use the "${motion.name}" motion curve ${motion.value} (design.json motion)`);
+for (const curve of motion) {
+	check(loopCssLc.includes(lc(curve.value)),
+		`loop CSS must use the "${curve.name}" motion curve ${curve.value} (design.json motion)`);
 }
 
 // Doc-surface integrity: the canonical artifacts exist and cross-link.
@@ -93,4 +165,4 @@ if (failures.length) {
 	process.exit(1);
 }
 
-console.log("Loop design-system contract verified (tokens, surface fallbacks, radii, shadows/motion, doc surface).");
+console.log("Loop design-system contract verified (tokens, surface fallbacks, colors, radii, shadows/motion, doc surface).");
