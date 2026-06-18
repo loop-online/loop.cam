@@ -25,7 +25,8 @@ check(
 // U1: getElementById("hiddenElements") resolves the first match, so a second
 // body-level #hiddenElements is dead weight. Each page must carry exactly one.
 for (const page of ["index.html", "room.html"]) {
-	const count = (read(page).match(/id="hiddenElements"/g) || []).length;
+	// Match either quote style: upstream VDO.Ninja markup mixes id='...' and id="...".
+	const count = (read(page).match(/id=["']hiddenElements["']/g) || []).length;
 	check(
 		count === 1,
 		`${page}: expected exactly one id="hiddenElements", found ${count} (U1 dedupe)`
@@ -69,10 +70,10 @@ for (const page of ["index.html", "room.html"]) {
 		`${page}: flip-camera glyph must use id="flipcameratoggle" (U7 dedupe)`
 	);
 	check(
-		!/id="settingstoggle"[^>]*la-sync-alt/.test(src),
+		!/id=["']settingstoggle["'][^>]*la-sync-alt/.test(src),
 		`${page}: id="settingstoggle" must not sit on the la-sync-alt (flip-camera) glyph`
 	);
-	const settingsCount = (src.match(/id="settingstoggle"/g) || []).length;
+	const settingsCount = (src.match(/id=["']settingstoggle["']/g) || []).length;
 	check(
 		settingsCount === 1,
 		`${page}: expected exactly one id="settingstoggle", found ${settingsCount}`
@@ -85,4 +86,4 @@ if (failures.length) {
 	process.exit(1);
 }
 
-console.log("Loop UI simplification pass verified (U5 home cards, U6 room disclosure, U7 toggle ids).");
+console.log("Loop UI simplification pass verified (U1 hiddenElements dedupe, U5 home cards, U6 room disclosure, U7 toggle ids).");
