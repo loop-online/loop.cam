@@ -11,6 +11,7 @@
     "dev": "python3 scripts/dev-server.py 8765",
     "build:icons": "node scripts/build-loop-icon-glyphs.js",
     "verify:icons": "node scripts/extract-line-icon-usage.js && node scripts/verify-loop-icon-system.js && node scripts/verify-loop-icon-coverage.js",
+    "verify:design": "node scripts/verify-loop-design-tokens.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
