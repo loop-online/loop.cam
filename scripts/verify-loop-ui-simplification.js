@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Pins the Loop UI simplification pass (U5/U6/U7). These are intentional,
+// Pins the Loop UI simplification pass (U1/U5/U6/U7). These are intentional,
 // merge-fragile edits to upstream-owned markup that no other verifier guards:
 // an upstream re-merge that silently reverts any of them should fail here.
 // Pure-node; runs without Playwright.

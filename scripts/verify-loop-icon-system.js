@@ -172,6 +172,14 @@ const wiredHtmlPages = fs.readdirSync(root)
 	.filter(file => fs.readFileSync(path.join(root, file), "utf8").includes("loop-icons.js"))
 	.sort();
 
+// Floor against a broken derivation (wrong cwd, renamed runtime ref): a near-empty
+// set would otherwise reach assertUniformCacheVersions and throw a cryptic message
+// instead of flagging that coverage silently collapsed. index/room are always wired.
+assert(
+	wiredHtmlPages.includes("index.html") && wiredHtmlPages.includes("room.html"),
+	`wiredHtmlPages derivation collapsed (got ${wiredHtmlPages.length}: ${wiredHtmlPages.join(", ") || "none"}); expected to include index.html and room.html`
+);
+
 assertUniformCacheVersions(
 	wiredHtmlPages,
 	{ css: "loop-icons.css", js: "loop-icons.js" },
