@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-16T00:00:00.000Z",
+  "title": "Design System: Loop Cam",
+  "extensions": {
+    "colorMeta": {
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Canvas",
+        "canonical": "oklch(18% 0 0)",
+        "tonalRamp": ["#0a0a0a", "#111111", "#171717", "#1e1e1e", "#252525", "#2c2c2c", "#333333", "#3a3a3a"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "oklch(32% 0.01 260)",
+        "tonalRamp": ["#2a2b2f", "#313338", "#383a40", "#404249", "#484b52", "#50545c", "#585d66", "#606670"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Loop Green",
+        "canonical": "oklch(72% 0.19 142)",
+        "tonalRamp": ["#1f4d18", "#2d6b24", "#3b8930", "#49a73c", "#64c04d", "#7fd06a", "#9adc87", "#b5e8a4"]
+      }
+    },
+    "typographyMeta": {
+      "body": { "displayName": "Body", "purpose": "Default UI copy and form text." },
+      "title": { "displayName": "Flow Title", "purpose": "Expanded card headers and modal titles." },
+      "label": { "displayName": "Panel Label", "purpose": "Setting row headers (Video Source, etc.)." }
+    },
+    "shadows": [
+      { "name": "toolbar", "value": "0 4px 16px rgb(0 0 0 / 0.45)", "purpose": "Floating control bar over video." },
+      { "name": "modal", "value": "0 12px 40px rgb(0 0 0 / 0.45)", "purpose": "Alert and permission dialogs." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default 160ms UI transitions." }
+    ],
+    "breakpoints": [
+      { "name": "home-3col", "value": "960px" },
+      { "name": "mobile", "value": "650px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Home Card",
+      "kind": "card",
+      "refersTo": "home-card",
+      "description": "Landing action tile — Room, Camera, or Screen.",
+      "html": "<article class=\"ds-home-card\"><h2 class=\"ds-home-card__title\">Share Camera</h2><span class=\"ds-home-card__icon\" aria-hidden=\"true\"></span></article>",
+      "css": ".ds-home-card { background: #404249; color: #e8eaed; border: 1px solid #4a4d55; border-radius: 16px; padding: 24px 20px 28px; min-height: 200px; text-align: center; } .ds-home-card__title { margin: 0 0 8px; font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; } .ds-home-card__icon { display: block; width: 80px; height: 80px; margin: 12px auto 0; opacity: 0.9; }"
+    },
+    {
+      "name": "Setting Panel",
+      "kind": "custom",
+      "refersTo": "panel-row",
+      "description": "Device or option row inside expanded flows.",
+      "html": "<section class=\"ds-panel\"><header class=\"ds-panel__title\"><span class=\"ds-panel__icon\" aria-hidden=\"true\"></span> Video Source</header><div class=\"ds-panel__row\"><select class=\"ds-panel__select\"><option>Default camera</option></select><button type=\"button\" class=\"ds-panel__gear\" aria-label=\"Settings\">⚙</button></div></section>",
+      "css": ".ds-panel { background: #313338; border: 1px solid #4a4d55; border-radius: 8px; padding: 12px 14px; max-width: 480px; color: #e8eaed; } .ds-panel__title { display: flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 600; margin-bottom: 6px; } .ds-panel__row { display: flex; align-items: center; gap: 8px; } .ds-panel__select { flex: 1; min-width: 0; background: #383a40; color: #e8eaed; border: 1px solid #4a4d55; border-radius: 8px; padding: 6px 10px; } .ds-panel__gear { width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #e8eaed; cursor: pointer; } .ds-panel__gear:hover { background: #383a40; }"
+    },
+    {
+      "name": "Primary Start Button",
+      "kind": "button",
+      "refersTo": "primary-action",
+      "description": "START / go live actions in camera and screen flows.",
+      "html": "<button type=\"button\" class=\"ds-btn-primary\">START</button>",
+      "css": ".ds-btn-primary { display: block; width: 100%; max-width: 480px; margin: 12px auto; padding: 16px 20px; border: 0; border-radius: 8px; background: #64c04d; color: #111; font-weight: 700; font-size: 1rem; cursor: pointer; transition: filter 160ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { filter: brightness(1.06); } .ds-btn-primary:focus-visible { outline: 2px solid #9ec7ee; outline-offset: 2px; }"
+    },
+    {
+      "name": "Footer Icon Button",
+      "kind": "button",
+      "description": "Bottom-right utility cluster control.",
+      "html": "<button type=\"button\" class=\"ds-footer-btn\" aria-label=\"Language\"><span aria-hidden=\"true\">A</span></button>",
+      "css": ".ds-footer-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; color: #a8b0bd; cursor: pointer; transition: background 160ms cubic-bezier(0.22, 1, 0.36, 1), color 160ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-footer-btn:hover { background: #313338; color: #e8eaed; } .ds-footer-btn:focus-visible { outline: 2px solid #6da5dd; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Control Room",
+    "overview": "Loop Cam is a broadcast tool with a dark, quiet interface. Directors and performers complete camera, screen, and room tasks without marketing chrome. Layout tokens live in loop-ui.css; icons in loop-icons.css.",
+    "keyCharacteristics": [
+      "Dark canvas with raised grey surfaces",
+      "Single green primary action color",
+      "Centered expanded-flow column (~480–560px)",
+      "Lucide via runtime upgrade on Line Awesome hooks",
+      "44px touch targets on footer and close controls"
+    ],
+    "rules": [
+      { "name": "The One Green Rule", "body": "Green is for go/live actions and active stream URLs only.", "section": "colors" },
+      { "name": "The Flat Panel Rule", "body": "Setting rows use one border and one background — no nested shadow cards.", "section": "elevation" },
+      { "name": "The Flat-By-Default Rule", "body": "Shadow appears only on floating toolbar and modals.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use loop-ui.css and loop-icons.css tokens.",
+      "Do align gear, chevron, and select on one flex row.",
+      "Do use loopCamPermissionDeniedHtml for permission errors."
+    ],
+    "donts": [
+      "Don't show vdo.ninja-branded permission screenshots.",
+      "Don't nest shadow cards inside expanded flows.",
+      "Don't use side-stripe accent borders on tips."
+    ]
+  }
+}

@@ -3,3 +3,7 @@ package-lock.json
 turn-credentials.php
 .vscode/
 .DS_Store
+
+# Machine-local / generated — never canonical
+.cursor/
+scripts/__pycache__/
